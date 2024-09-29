@@ -13,6 +13,9 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -65,8 +68,9 @@ public class User {
 
     }
 
-    public User(Long userId, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, Long labId, Laboratory laboratory) {
+    public User(Long userId, String username, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, Long labId, Laboratory laboratory) {
         this.userId = userId;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -77,6 +81,14 @@ public class User {
         this.otp = otp;
         this.labId = labId;
         this.laboratory = laboratory;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getUserId() {

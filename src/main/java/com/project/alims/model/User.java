@@ -15,26 +15,39 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = true)
     private String password;
 
-    @Column(nullable = false)
-    private String role;
+    @Column(nullable = false, name = "first_name")
+    private String firstName;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "lab_id", nullable = false)
-    private Laboratory laboratory;
+    @Column(name = "middle_name")
+    private String middleName;
+
+    @Column(nullable = false, name = "last_name")
+    private String lastName;
+
+    @Column(nullable = false)
+    private String designation;
+
+    @Column(nullable = false)
+    private String status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column
+    private String otp;
+
+    @Column(name = "lab_id")
+    private Long labId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "lab_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Laboratory laboratory;
+
 
     @PrePersist
     protected void onCreate() {
@@ -45,6 +58,24 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public User() {
+
+    }
+
+    public User(Long id, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, Long labId, Laboratory laboratory) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.designation = designation;
+        this.status = status;
+        this.otp = otp;
+        this.labId = labId;
+        this.laboratory = laboratory;
     }
 
     public Long getId() {
@@ -63,22 +94,6 @@ public class User {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -87,12 +102,70 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public Long getLabId() {
+        return labId;
+    }
+
+    public void setLabId(Long labId) {
+        this.labId = labId;
     }
 
     public Laboratory getLaboratory() {
@@ -101,21 +174,5 @@ public class User {
 
     public void setLaboratory(Laboratory laboratory) {
         this.laboratory = laboratory;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

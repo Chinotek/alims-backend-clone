@@ -11,10 +11,7 @@ public class Laboratory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String shortname;
-
-    @Column(nullable = false)
+    @Column(nullable = false, name = "lab_name")
     private String labName;
 
     @Column(nullable = false)
@@ -36,6 +33,13 @@ public class Laboratory {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    public Laboratory() {
+    }
+    public Laboratory(Long id, String labName, String location) {
+        this.id = id;
+        this.labName = labName;
+        this.location = location;
+    }
 
     public Long getId() {
         return id;
@@ -43,14 +47,6 @@ public class Laboratory {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getShortname() {
-        return shortname;
-    }
-
-    public void setShortname(String shortname) {
-        this.shortname = shortname;
     }
 
     public String getLabName() {
@@ -73,15 +69,7 @@ public class Laboratory {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

@@ -3,13 +3,22 @@ package com.project.alims.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "laboratory_id", nullable = false)
+    private Laboratory laboratory;
+
     @Column(nullable = false, unique = true)
-    private String shortname;
+    private String shortName;
+
+    @Column(nullable = false, unique = true)
+    private String subcategory;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -36,13 +45,31 @@ public class Category {
         this.id = id;
     }
 
-    public String getShortname() {
-        return shortname;
+    public Laboratory getLaboratory() {
+        return laboratory;
     }
 
-    public void setShortname(String shortname) {
-        this.shortname = shortname;
+    public void setLaboratory(Laboratory laboratory) {
+        this.laboratory = laboratory;
     }
+
+
+    public String getShortname() {
+        return shortName;
+    }
+
+    public void setShortname(String shortName) {
+        this.shortName = shortName;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

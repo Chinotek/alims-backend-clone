@@ -9,7 +9,8 @@ public class Laboratory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "lab_id")
+    private Long labId;
 
     @Column(nullable = false, name = "lab_name")
     private String labName;
@@ -35,18 +36,18 @@ public class Laboratory {
     }
     public Laboratory() {
     }
-    public Laboratory(Long id, String labName, String location) {
-        this.id = id;
+    public Laboratory(Long labId, String labName, String location) {
+        this.labId = labId;
         this.labName = labName;
         this.location = location;
     }
 
-    public Long getId() {
-        return id;
+    public Long getLabId() {
+        return labId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLabId(Long labId) {
+        this.labId = labId;
     }
 
     public String getLabName() {

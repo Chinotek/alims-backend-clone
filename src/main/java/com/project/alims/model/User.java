@@ -9,7 +9,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -44,8 +45,8 @@ public class User {
     @Column(name = "lab_id")
     private Long labId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "lab_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne()
+    @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", insertable = false, updatable = false)
     private Laboratory laboratory;
 
 
@@ -64,8 +65,8 @@ public class User {
 
     }
 
-    public User(Long id, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, Long labId, Laboratory laboratory) {
-        this.id = id;
+    public User(Long userId, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, Long labId, Laboratory laboratory) {
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -78,12 +79,12 @@ public class User {
         this.laboratory = laboratory;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {

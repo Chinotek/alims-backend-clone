@@ -9,7 +9,7 @@ public class DisposalForm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "incident_id")
+    @Column(name = "disposal_id")
     private Long disposalId;
 
     @ManyToOne(fetch = FetchType.LAZY)

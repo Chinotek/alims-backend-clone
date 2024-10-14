@@ -33,7 +33,7 @@ public class DisposalFormController {
         return ResponseEntity.ok(forms);
     }
 
-    // Get DisposalForm by incidentId
+    // Get DisposalForm by disposalId
     @GetMapping("/{id}")
     public ResponseEntity<DisposalForm> getDisposalFormById(@PathVariable Long id) {
         DisposalForm form = disposalFormService.findDisposalFormById(id);

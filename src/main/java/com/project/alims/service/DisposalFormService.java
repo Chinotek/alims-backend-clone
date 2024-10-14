@@ -25,8 +25,8 @@ public class DisposalFormService {
         return disposalFormRepository.findAll();
     }
 
-    public DisposalForm findDisposalFormById(Long incidentId) {
-        Optional<DisposalForm> disposalForm = disposalFormRepository.findById(incidentId);
+    public DisposalForm findDisposalFormById(Long disposalId) {
+        Optional<DisposalForm> disposalForm = disposalFormRepository.findById(disposalId);
         return disposalForm.orElse(null);
     }
 
@@ -38,8 +38,8 @@ public class DisposalFormService {
         return disposalFormRepository.findByMaterialItemCode(itemCode);
     }
 
-    public DisposalForm updateDisposalForm(Long incidentId, DisposalForm updatedDisposalForm) {
-        DisposalForm existingDisposalForm = findDisposalFormById(incidentId);
+    public DisposalForm updateDisposalForm(Long disposalId, DisposalForm updatedDisposalForm) {
+        DisposalForm existingDisposalForm = findDisposalFormById(disposalId);
         if (existingDisposalForm != null) {
             existingDisposalForm.setItemDescription(updatedDisposalForm.getItemDescription());
             existingDisposalForm.setQty(updatedDisposalForm.getQty());
@@ -50,16 +50,16 @@ public class DisposalFormService {
             // dateUpdated is handled by @PreUpdate in the entity class
             return disposalFormRepository.save(existingDisposalForm);
         } else {
-            throw new RuntimeException("DisposalForm not found with ID: " + incidentId);
+            throw new RuntimeException("DisposalForm not found with ID: " + disposalId);
         }
     }
 
-    public void deleteDisposalForm(Long incidentId) {
-        DisposalForm disposalForm = findDisposalFormById(incidentId);
+    public void deleteDisposalForm(Long disposalId) {
+        DisposalForm disposalForm = findDisposalFormById(disposalId);
         if (disposalForm != null) {
-            disposalFormRepository.deleteById(incidentId);
+            disposalFormRepository.deleteById(disposalId);
         } else {
-            throw new RuntimeException("DisposalForm not found with ID: " + incidentId);
+            throw new RuntimeException("DisposalForm not found with ID: " + disposalId);
         }
     }
 }

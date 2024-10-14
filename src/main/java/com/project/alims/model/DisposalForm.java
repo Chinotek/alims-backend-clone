@@ -10,7 +10,7 @@ public class DisposalForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "incident_id")
-    private Long incidentId;
+    private Long disposalId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
@@ -47,9 +47,9 @@ public class DisposalForm {
     // Constructors
     public DisposalForm() {}
 
-    public DisposalForm(Long incidentId, User user, Material material, String itemDescription, Integer qty,
+    public DisposalForm(Long disposalId, User user, Material material, String itemDescription, Integer qty,
                         String reasonForDisposal, String disposalMethod, String disposedBy, String comments) {
-        this.incidentId = incidentId;
+        this.disposalId = disposalId;
         this.user = user;
         this.material = material;
         this.itemDescription = itemDescription;
@@ -73,12 +73,12 @@ public class DisposalForm {
         dateUpdated = LocalDateTime.now();
     }
 
-    public Long getIncidentId() {
-        return incidentId;
+    public Long getDisposalId() {
+        return disposalId;
     }
 
-    public void setIncidentId(Long incidentId) {
-        this.incidentId = incidentId;
+    public void setDisposalId(Long disposalId) {
+        this.disposalId = disposalId;
     }
 
     public User getUser() {

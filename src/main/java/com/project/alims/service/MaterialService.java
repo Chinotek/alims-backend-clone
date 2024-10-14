@@ -2,7 +2,7 @@ package com.project.alims.service;
 
 import com.project.alims.model.Material;
 import com.project.alims.model.Category;
-import com.project.alims.model.Laboratory;
+import com.project.alims.model.Supplier;
 import com.project.alims.repository.MaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,39 +21,32 @@ public class MaterialService {
         this.materialRepository = materialRepository;
     }
 
-    // Create a new material
     public Material createMaterial(Material material) {
         material.setCreatedAt(LocalDateTime.now());
         material.setUpdatedAt(LocalDateTime.now());
         return materialRepository.save(material);
     }
 
-    // Find material by ID
     public Optional<Material> findById(Long id) {
         return materialRepository.findById(id);
     }
 
-    // Get all materials
     public List<Material> findAllMaterials() {
         return materialRepository.findAll();
     }
 
-    // Find materials by category
     public List<Material> findByCategory(Category category) {
         return materialRepository.findByCategory(category);
     }
 
-    // Find materials by laboratory
-    public List<Material> findByLaboratory(Laboratory laboratory) {
-        return materialRepository.findByLaboratory(laboratory);
+    public List<Material> findBySupplier(Supplier supplier) {
+        return materialRepository.findBySupplier(supplier);
     }
 
-    // Find material by item code
     public Optional<Material> findByItemCode(String itemCode) {
         return Optional.ofNullable(materialRepository.findByItemCode(itemCode));
     }
 
-    // Update an existing material
     public Material updateMaterial(Long id, Material updatedMaterial) {
         return materialRepository.findById(id).map(material -> {
             material.setItemName(updatedMaterial.getItemName());
@@ -75,7 +68,6 @@ public class MaterialService {
         }).orElseThrow(() -> new RuntimeException("Material not found with ID: " + id));
     }
 
-    // Delete a material by ID
     public void deleteMaterial(Long id) {
         materialRepository.deleteById(id);
     }

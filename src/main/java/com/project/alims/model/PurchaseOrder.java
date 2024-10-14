@@ -13,8 +13,9 @@ public class PurchaseOrder {
     @Column(name = "po_id")
     private Long poId;
 
-    @Column(name = "item_code", nullable = false)
-    private String itemCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    private Material material;  // Foreign key to Materials
 
     @Column(nullable = false)
     private Integer qty;
@@ -65,9 +66,9 @@ public class PurchaseOrder {
 
     public PurchaseOrder() {}
 
-    public PurchaseOrder(Long poId, String itemCode, Integer qty, String description, Laboratory laboratory, User user, Supplier supplier, BigDecimal unitPrice, BigDecimal shippingCost, BigDecimal totalPrice, String status) {
-        this.poId = poId;
-        this.itemCode = itemCode;
+    public PurchaseOrder(Material material, int qty, String description, Laboratory laboratory, User user, Supplier supplier,
+                         BigDecimal unitPrice, BigDecimal shippingCost, BigDecimal totalPrice, String status) {
+        this.material = material;
         this.qty = qty;
         this.description = description;
         this.laboratory = laboratory;
@@ -89,12 +90,12 @@ public class PurchaseOrder {
         this.poId = poId;
     }
 
-    public String getItemCode() {
-        return itemCode;
+    public Material getMaterial() {
+        return material;
     }
 
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     public Integer getQty() {

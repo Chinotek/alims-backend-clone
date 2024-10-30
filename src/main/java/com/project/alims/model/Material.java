@@ -86,7 +86,7 @@ public class Material {
         return itemName;
     }
 
-    public void getItemName(String itemName) {
+    public void setItemName(String itemName) {
         this.itemName = itemName;
     }
 

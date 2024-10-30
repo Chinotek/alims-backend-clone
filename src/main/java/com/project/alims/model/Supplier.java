@@ -9,10 +9,10 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long supplierId;
 
-    @Column(name = "comapny_name", nullable = false, unique = true)
-    private String comapny_name;
+    @Column(name = "company_name", nullable = false, unique = true)
+    private String companyName;
 
     @Column(name = "contact_person", nullable = false)
     private String contactPerson;
@@ -34,20 +34,20 @@ public class Supplier {
 
     // Getters and Setters
 
-    public Long getId() {
-        return id;
+    public Long getSupplierId() {
+        return supplierId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
-    public String getComapny_name() {
-        return comapny_name;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setComapny_name(String comapny_name) {
-        this.comapny_name = comapny_name;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getContactPerson() {

@@ -14,11 +14,13 @@ public class Incident {
     @Column(name = "incident_id")
     private Long incidentId;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "item_code", nullable = false)
-    private Long itemCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    private Material material;  // Foreign key to Materials
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -44,8 +46,8 @@ public class Incident {
     @Column(name = "involved_individuals")
     private String involvedIndividuals;
 
-    @Column(name = "attached_documentation")
-    private String attachedDocumentation;
+    @Column(name = "attachments")
+    private String attachments;
 
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
@@ -67,9 +69,10 @@ public class Incident {
     // Constructors
     public Incident() {}
 
-    public Incident(Long userId, Long itemCode, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, Integer qty, String brand, String remarks, String involvedIndividuals, String attachedDocumentation) {
-        this.userId = userId;
-        this.itemCode = itemCode;
+    public Incident(Long incidentId, User user, Material material, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, Integer qty, String brand, String remarks, String involvedIndividuals, String attachments, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+        this.incidentId = incidentId;
+        this.user = user;
+        this.material = material;
         this.date = date;
         this.time = time;
         this.natureOfIncident = natureOfIncident;
@@ -78,8 +81,11 @@ public class Incident {
         this.brand = brand;
         this.remarks = remarks;
         this.involvedIndividuals = involvedIndividuals;
-        this.attachedDocumentation = attachedDocumentation;
+        this.attachments = attachments;
+        this.creationDate = creationDate;
+        this.dateUpdated = dateUpdated;
     }
+
 
     // Getters and Setters
     public Long getIncidentId() {
@@ -90,20 +96,28 @@ public class Incident {
         this.incidentId = incidentId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Long getItemCode() {
-        return itemCode;
+    public Material getMaterial() {
+        return material;
     }
 
-    public void setItemCode(Long itemCode) {
-        this.itemCode = itemCode;
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setDateUpdated(LocalDateTime dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 
     public LocalDate getDate() {
@@ -169,12 +183,12 @@ public class Incident {
         this.involvedIndividuals = involvedIndividuals;
     }
 
-    public String getAttachedDocumentation() {
-        return attachedDocumentation;
+    public String getAttachments() {
+        return attachments;
     }
 
-    public void setAttachedDocumentation(String attachedDocumentation) {
-        this.attachedDocumentation = attachedDocumentation;
+    public void setAttachments(String attachments) {
+        this.attachments = attachments;
     }
 
     public LocalDateTime getCreationDate() {

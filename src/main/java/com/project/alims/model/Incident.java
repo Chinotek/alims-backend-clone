@@ -51,9 +51,20 @@ public class Incident {
     // Constructors
     public Incident() {}
 
-
+    public Incident(Long incidentId, Material material, IncidentForm incidentForm, Integer qty, String brand, String remarks, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+        this.incidentId = incidentId;
+        this.material = material;
+        this.incidentForm = incidentForm;
+        this.qty = qty;
+        this.brand = brand;
+        this.remarks = remarks;
+        this.creationDate = creationDate;
+        this.dateUpdated = dateUpdated;
+    }
 
     // Getters and Setters
+
+
     public Long getIncidentId() {
         return incidentId;
     }
@@ -70,12 +81,12 @@ public class Incident {
         this.material = material;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public IncidentForm getIncidentForm() {
+        return incidentForm;
     }
 
-    public void setDateUpdated(LocalDateTime dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setIncidentForm(IncidentForm incidentForm) {
+        this.incidentForm = incidentForm;
     }
 
     public Integer getQty() {
@@ -85,6 +96,7 @@ public class Incident {
     public void setQty(Integer qty) {
         this.qty = qty;
     }
+
     public String getBrand() {
         return brand;
     }
@@ -105,7 +117,15 @@ public class Incident {
         return creationDate;
     }
 
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public LocalDateTime getDateUpdated() {
         return dateUpdated;
+    }
+
+    public void setDateUpdated(LocalDateTime dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 }

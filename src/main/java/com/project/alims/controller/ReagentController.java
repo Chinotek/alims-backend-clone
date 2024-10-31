@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/reagents")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/reagents")
 public class ReagentController {
 
     private final ReagentService reagentService;

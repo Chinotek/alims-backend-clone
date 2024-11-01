@@ -38,7 +38,7 @@ public class SupplierService {
         Optional<Supplier> supplierOptional = supplierRepository.findById(id);
         if (supplierOptional.isPresent()) {
             Supplier supplier = supplierOptional.get();
-            supplier.setComapny_name(supplierDetails.getComapny_name());
+            supplier.setCompanyName(supplierDetails.getCompanyName());
             supplier.setContactPerson(supplierDetails.getContactPerson());
             supplier.setEmail(supplierDetails.getEmail());
             supplier.setAddress(supplierDetails.getAddress());

@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface IncidentRepository extends JpaRepository<Incident, Long> {
-
-    List<Incident> findByFormId(Long departmentId);
-
+    List<Incident> findByIncidentFormIncidentFormId(Long departmentId);
 }

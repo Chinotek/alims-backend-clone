@@ -22,8 +22,8 @@ public class InventoryLogService {
         return inventoryLogRepository.findAll();
     }
 
-    public Optional<InventoryLog> getInventoryLogById(Long id) {
-        return inventoryLogRepository.findById(id);
+    public InventoryLog findByInventoryLogId(Long id) {
+        return inventoryLogRepository.findById(id).orElse(null);
     }
 
     public InventoryLog createInventoryLog(InventoryLog inventoryLog) {

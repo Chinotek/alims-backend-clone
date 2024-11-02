@@ -1,6 +1,7 @@
 package com.project.alims.controller;
 
 import com.project.alims.model.InventoryLog;
+import com.project.alims.model.PurchaseOrder;
 import com.project.alims.service.InventoryLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,12 @@ public class InventoryLogController {
 
     @GetMapping("/{id}")
     public ResponseEntity<InventoryLog> getInventoryLogById(@PathVariable Long id) {
-        Optional<InventoryLog> inventoryLog = inventoryLogService.getInventoryLogById(id);
-        return inventoryLog.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        InventoryLog inventoryLog = inventoryLogService.findByInventoryLogId(id);
+        if (inventoryLog != null) {
+            return ResponseEntity.ok(inventoryLog);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -51,8 +55,12 @@ public class InventoryLogController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInventoryLog(@PathVariable Long id) {
-        inventoryLogService.deleteInventoryLog(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteInventoryLog(@PathVariable Long id) {
+        try {
+            inventoryLogService.deleteInventoryLog(id);
+            return ResponseEntity.ok("Inventory Log deleted successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

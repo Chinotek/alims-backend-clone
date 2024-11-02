@@ -26,20 +26,23 @@ public class IncidentService {
         return incidentRepository.findAll();
     }
 
-    public Optional<Incident> getIncidentById(Long id) {
-        return incidentRepository.findById(id);
+    public Incident findByIncidentId(Long id) {
+        return incidentRepository.findById(id).orElse(null);
     }
 
     public Incident updateIncident(Long id, Incident updatedIncident) {
-        return incidentRepository.findById(id).map(incident -> {
-            incident.setQty(updatedIncident.getQty());
-            incident.setBrand(updatedIncident.getBrand());
-            incident.setRemarks(updatedIncident.getRemarks());
-            return incidentRepository.save(incident);
-        }).orElseThrow(() -> new RuntimeException("Incident not found with id " + id));
+        Incident existingIncident = incidentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Incident not found with ID: " + id));
+
+        existingIncident.setQty(updatedIncident.getQty());
+        existingIncident.setBrand(updatedIncident.getBrand());
+        existingIncident.setRemarks(updatedIncident.getRemarks());
+        return incidentRepository.save(existingIncident);
     }
 
     public void deleteIncident(Long id) {
+        Incident existingIncident = incidentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Incident not found with ID: " + id));
         incidentRepository.deleteById(id);
     }
 }

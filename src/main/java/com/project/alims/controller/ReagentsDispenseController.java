@@ -1,8 +1,10 @@
 package com.project.alims.controller;
 
+import com.project.alims.model.PurchaseOrder;
 import com.project.alims.model.ReagentsDispense;
 import com.project.alims.service.ReagentsDispenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,20 +36,31 @@ public class ReagentsDispenseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ReagentsDispense> getReagentsDispenseById(@PathVariable Long id) {
-        return reagentsDispenseService.getReagentsDispenseById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        ReagentsDispense reagentsDispense = reagentsDispenseService.findByDispenseId(id);
+        if (reagentsDispense != null) {
+            return ResponseEntity.ok(reagentsDispense);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReagentsDispense> updateReagentsDispense(@PathVariable Long id, @RequestBody ReagentsDispense reagentsDispense) {
-        ReagentsDispense updatedReagentsDispense = reagentsDispenseService.updateReagentsDispense(id, reagentsDispense);
-        return ResponseEntity.ok(updatedReagentsDispense);
+    public ResponseEntity<ReagentsDispense> updateReagentsDispense(@PathVariable Long id, @RequestBody ReagentsDispense updatedreagentsDispense) {
+        try {
+            ReagentsDispense reagentsDispense = reagentsDispenseService.updateReagentsDispense(id, updatedreagentsDispense);
+            return ResponseEntity.ok(reagentsDispense);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReagentsDispense(@PathVariable Long id) {
-        reagentsDispenseService.deleteReagentsDispense(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteReagentsDispense(@PathVariable Long id) {
+        try {
+            reagentsDispenseService.deleteReagentsDispense(id);
+            return ResponseEntity.ok("Reagent Dispense deleted successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

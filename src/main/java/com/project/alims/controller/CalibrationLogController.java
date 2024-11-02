@@ -30,8 +30,8 @@ public class CalibrationLogController {
     // Get all CalibrationLogs
     @GetMapping("/all")
     public ResponseEntity<List<CalibrationLog>> getAllCalibrationLogs() {
-        List<CalibrationLog> logs = calibrationLogService.findAllCalibrationLogs();
-        return ResponseEntity.ok(logs);
+        List<CalibrationLog> calibrationLogs = calibrationLogService.getAllCalibrationLogs();
+        return ResponseEntity.ok(calibrationLogs);
     }
 
     // Get CalibrationLog by calibrationId
@@ -72,10 +72,10 @@ public class CalibrationLogController {
 
     // Delete a CalibrationLog by ID
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCalibrationLog(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCalibrationLog(@PathVariable Long id) {
         try {
             calibrationLogService.deleteCalibrationLog(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Calibration Log deleted successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

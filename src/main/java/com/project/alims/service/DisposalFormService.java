@@ -31,7 +31,7 @@ public class DisposalFormService {
     }
 
     public List<DisposalForm> findDisposalFormsByUserId(Long userId) {
-        return disposalFormRepository.findByUserId(userId);
+        return disposalFormRepository.findByUserUserId(userId);
     }
 
     public List<DisposalForm> findDisposalFormsByItemCode(String itemCode) {

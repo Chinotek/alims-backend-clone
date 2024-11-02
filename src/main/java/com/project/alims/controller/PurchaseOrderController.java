@@ -36,7 +36,7 @@ public class PurchaseOrderController {
     // Get purchase order by ID
     @GetMapping("/{id}")
     public ResponseEntity<PurchaseOrder> getPurchaseOrderById(@PathVariable Long id) {
-        PurchaseOrder purchaseOrder = purchaseOrderService.findById(id);
+        PurchaseOrder purchaseOrder = purchaseOrderService.findByPurchaseOrderId(id);
         if (purchaseOrder != null) {
             return ResponseEntity.ok(purchaseOrder);
         } else {
@@ -59,10 +59,10 @@ public class PurchaseOrderController {
 
     // Delete purchase order by ID
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletePurchaseOrder(@PathVariable Long id) {
+    public ResponseEntity<String> deletePurchaseOrder(@PathVariable Long id) {
         try {
             purchaseOrderService.deletePurchaseOrder(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Purchase Order deleted successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

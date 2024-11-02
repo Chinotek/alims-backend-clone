@@ -9,6 +9,7 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long supplierId;
 
     @Column(name = "company_name", nullable = false, unique = true)

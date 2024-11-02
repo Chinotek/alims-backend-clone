@@ -10,8 +10,8 @@ public class PurchaseOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "po_id")
-    private Long poId;
+    @Column(name = "purchase_order_id")
+    private Long purchaseOrderId;
 
     @Column(name = "shipping_cost", nullable = false)
     private BigDecimal shippingCost;
@@ -53,8 +53,8 @@ public class PurchaseOrder {
 
     public PurchaseOrder() {}
 
-    public PurchaseOrder(Long poId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDateTime creationDate, LocalDateTime dateUpdated, Laboratory laboratory, User user, Supplier supplier) {
-        this.poId = poId;
+    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDateTime creationDate, LocalDateTime dateUpdated, Laboratory laboratory, User user, Supplier supplier) {
+        this.purchaseOrderId = purchaseOrderId;
         this.shippingCost = shippingCost;
         this.totalPrice = totalPrice;
         this.status = status;
@@ -65,14 +65,12 @@ public class PurchaseOrder {
         this.supplier = supplier;
     }
 
-    // Getters and Setters
-
-    public Long getPoId() {
-        return poId;
+    public Long getPurchaseOrderId() {
+        return purchaseOrderId;
     }
 
-    public void setPoId(Long poId) {
-        this.poId = poId;
+    public void setPurchaseOrderId(Long purchaseOrderId) {
+        this.purchaseOrderId = purchaseOrderId;
     }
 
     public BigDecimal getShippingCost() {

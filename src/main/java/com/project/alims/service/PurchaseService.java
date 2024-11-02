@@ -21,9 +21,9 @@ public class PurchaseService {
         return purchaseRepository.findAll();
     }
 
-    public Purchase findById(Long poId) {
-        return purchaseRepository.findById(poId)
-                .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + poId));
+    public Purchase findByPurchaseId(Long PurchaseId) {
+        return purchaseRepository.findById(PurchaseId)
+                .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + PurchaseId));
     }
 
     // Create a new purchase order
@@ -32,9 +32,9 @@ public class PurchaseService {
     }
 
     // Update an existing purchase order by its ID
-    public Purchase updatePurchase(Long poId, Purchase updatedPurchase) {
-        Purchase existingOrder = purchaseRepository.findById(poId)
-                .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + poId));
+    public Purchase updatePurchase(Long PurchaseId, Purchase updatedPurchase) {
+        Purchase existingOrder = purchaseRepository.findById(PurchaseId)
+                .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + PurchaseId));
 
         // Update fields
         existingOrder.setMaterial(updatedPurchase.getMaterial());
@@ -47,9 +47,9 @@ public class PurchaseService {
     }
 
     // Delete a purchase order by its ID
-    public void deletePurchase(Long poId) {
-        Purchase existingOrder = purchaseRepository.findById(poId)
-                .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + poId));
-        purchaseRepository.deleteById(poId);
+    public void deletePurchase(Long PurchaseId) {
+        Purchase existingOrder = purchaseRepository.findById(PurchaseId)
+                .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + PurchaseId));
+        purchaseRepository.deleteById(PurchaseId);
     }
 }

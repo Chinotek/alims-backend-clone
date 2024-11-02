@@ -11,10 +11,10 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_id")
-    private Long poId;
+    private Long purchaseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_order", referencedColumnName = "po_id", nullable = false)
+    @JoinColumn(name = "purchase_order", referencedColumnName = "purchase_order_id", nullable = false)
     private PurchaseOrder purchaseOrder;  // Foreign key to Materials
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,8 +50,8 @@ public class Purchase {
     public Purchase() {
     }
 
-    public Purchase(Long poId, PurchaseOrder purchaseOrder, Material material, Integer qty, String description, BigDecimal unitPrice, LocalDateTime creationDate, LocalDateTime dateUpdated) {
-        this.poId = poId;
+    public Purchase(Long purchaseId, PurchaseOrder purchaseOrder, Material material, Integer qty, String description, BigDecimal unitPrice, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+        this.purchaseId = purchaseId;
         this.purchaseOrder = purchaseOrder;
         this.material = material;
         this.qty = qty;
@@ -62,14 +62,12 @@ public class Purchase {
     }
 
     // Getters and Setters
-
-
-    public Long getPoId() {
-        return poId;
+    public Long getPurchaseId() {
+        return purchaseId;
     }
 
-    public void setPoId(Long poId) {
-        this.poId = poId;
+    public void setPurchaseId(Long purchaseId) {
+        this.purchaseId = purchaseId;
     }
 
     public PurchaseOrder getPurchaseOrder() {

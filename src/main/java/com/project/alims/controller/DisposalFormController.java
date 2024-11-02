@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/disposal-form")
+@RequestMapping("/disposal")
 public class DisposalFormController {
 
     private final DisposalFormService disposalFormService;

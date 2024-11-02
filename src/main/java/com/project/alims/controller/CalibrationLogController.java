@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/calibration-log")
+@RequestMapping("/calibration")
 public class CalibrationLogController {
 
     private final CalibrationLogService calibrationLogService;

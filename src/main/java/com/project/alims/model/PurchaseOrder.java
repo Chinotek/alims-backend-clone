@@ -13,19 +13,6 @@ public class PurchaseOrder {
     @Column(name = "po_id")
     private Long poId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
-    private Material material;  // Foreign key to Materials
-
-    @Column(nullable = false)
-    private Integer qty;
-
-    @Column(nullable = false)
-    private String description;
-
-    @Column(name = "unit_price", nullable = false)
-    private BigDecimal unitPrice;
-
     @Column(name = "shipping_cost", nullable = false)
     private BigDecimal shippingCost;
 
@@ -66,18 +53,16 @@ public class PurchaseOrder {
 
     public PurchaseOrder() {}
 
-    public PurchaseOrder(Material material, int qty, String description, Laboratory laboratory, User user, Supplier supplier,
-                         BigDecimal unitPrice, BigDecimal shippingCost, BigDecimal totalPrice, String status) {
-        this.material = material;
-        this.qty = qty;
-        this.description = description;
-        this.laboratory = laboratory;
-        this.user = user;
-        this.supplier = supplier;
-        this.unitPrice = unitPrice;
+    public PurchaseOrder(Long poId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDateTime creationDate, LocalDateTime dateUpdated, Laboratory laboratory, User user, Supplier supplier) {
+        this.poId = poId;
         this.shippingCost = shippingCost;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.creationDate = creationDate;
+        this.dateUpdated = dateUpdated;
+        this.laboratory = laboratory;
+        this.user = user;
+        this.supplier = supplier;
     }
 
     // Getters and Setters
@@ -88,62 +73,6 @@ public class PurchaseOrder {
 
     public void setPoId(Long poId) {
         this.poId = poId;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    public Integer getQty() {
-        return qty;
-    }
-
-    public void setQty(Integer qty) {
-        this.qty = qty;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Laboratory getLaboratory() {
-        return laboratory;
-    }
-
-    public void setLaboratory(Laboratory laboratory) {
-        this.laboratory = laboratory;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
     }
 
     public BigDecimal getShippingCost() {
@@ -174,7 +103,39 @@ public class PurchaseOrder {
         return creationDate;
     }
 
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public LocalDateTime getDateUpdated() {
         return dateUpdated;
+    }
+
+    public void setDateUpdated(LocalDateTime dateUpdated) {
+        this.dateUpdated = dateUpdated;
+    }
+
+    public Laboratory getLaboratory() {
+        return laboratory;
+    }
+
+    public void setLaboratory(Laboratory laboratory) {
+        this.laboratory = laboratory;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 }

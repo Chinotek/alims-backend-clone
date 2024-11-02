@@ -32,15 +32,9 @@ public class IncidentService {
 
     public Incident updateIncident(Long id, Incident updatedIncident) {
         return incidentRepository.findById(id).map(incident -> {
-            incident.setDate(updatedIncident.getDate());
-            incident.setTime(updatedIncident.getTime());
-            incident.setNatureOfIncident(updatedIncident.getNatureOfIncident());
-            incident.setMaterialsInvolved(updatedIncident.getMaterialsInvolved());
             incident.setQty(updatedIncident.getQty());
             incident.setBrand(updatedIncident.getBrand());
             incident.setRemarks(updatedIncident.getRemarks());
-            incident.setInvolvedIndividuals(updatedIncident.getInvolvedIndividuals());
-            incident.setAttachments(updatedIncident.getAttachments());
             return incidentRepository.save(incident);
         }).orElseThrow(() -> new RuntimeException("Incident not found with id " + id));
     }

@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reagentsDispenses")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/reagents_dispense")
 public class ReagentsDispenseController {
 
     private final ReagentsDispenseService reagentsDispenseService;

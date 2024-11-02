@@ -37,10 +37,6 @@ public class PurchaseOrderService {
                 .orElseThrow(() -> new RuntimeException("PurchaseOrder not found with ID: " + poId));
 
         // Update fields
-        existingOrder.setMaterial(updatedPurchaseOrder.getMaterial());
-        existingOrder.setQty(updatedPurchaseOrder.getQty());
-        existingOrder.setDescription(updatedPurchaseOrder.getDescription());
-        existingOrder.setUnitPrice(updatedPurchaseOrder.getUnitPrice());
         existingOrder.setShippingCost(updatedPurchaseOrder.getShippingCost());
         existingOrder.setTotalPrice(updatedPurchaseOrder.getTotalPrice());
         existingOrder.setStatus(updatedPurchaseOrder.getStatus());

@@ -1,14 +1,12 @@
 package com.project.alims.repository;
 
-import com.project.alims.model.Incident;
+import com.project.alims.model.IncidentForm;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface IncidentRepository extends JpaRepository<Incident, Long> {
-
-    List<Incident> findByFormId(Long departmentId);
-
+public interface IncidentFormRepository extends JpaRepository<IncidentForm, Long> {
+    List<IncidentForm> findByUserId(Long userId);
 }

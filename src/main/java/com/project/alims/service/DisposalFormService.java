@@ -41,6 +41,12 @@ public class DisposalFormService {
     public DisposalForm updateDisposalForm(Long disposalId, DisposalForm updatedDisposalForm) {
         DisposalForm existingDisposalForm = findDisposalFormById(disposalId);
         if (existingDisposalForm != null) {
+
+            existingDisposalForm.setUserId(updatedDisposalForm.getUserId());
+            existingDisposalForm.setMaterialId(updatedDisposalForm.getMaterialId());
+            existingDisposalForm.setUser(updatedDisposalForm.getUser());
+            existingDisposalForm.setMaterial(updatedDisposalForm.getMaterial());
+
             existingDisposalForm.setItemDescription(updatedDisposalForm.getItemDescription());
             existingDisposalForm.setQty(updatedDisposalForm.getQty());
             existingDisposalForm.setReasonForDisposal(updatedDisposalForm.getReasonForDisposal());

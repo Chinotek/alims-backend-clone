@@ -35,6 +35,7 @@ public class InventoryLogService {
                 .map(existingLog -> {
                     existingLog.setDate(updatedInventoryLog.getDate());
                     existingLog.setRemarks(updatedInventoryLog.getRemarks());
+                    existingLog.setUserId(updatedInventoryLog.getUserId());
                     existingLog.setUser(updatedInventoryLog.getUser());
                     return inventoryLogRepository.save(existingLog);
                 }).orElseThrow(() -> new RuntimeException("InventoryLog not found"));

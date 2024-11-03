@@ -34,6 +34,13 @@ public class IncidentService {
         Incident existingIncident = incidentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident not found with ID: " + id));
 
+        existingIncident.setMaterialId(updatedIncident.getMaterialId());
+        existingIncident.setMaterial(updatedIncident.getMaterial());
+        existingIncident.setFormId(updatedIncident.getFormId());
+        existingIncident.setIncidentForm(updatedIncident.getIncidentForm());
+
+        existingIncident.setQty(updatedIncident.getQty());
+
         existingIncident.setQty(updatedIncident.getQty());
         existingIncident.setBrand(updatedIncident.getBrand());
         existingIncident.setRemarks(updatedIncident.getRemarks());

@@ -39,6 +39,12 @@ public class PurchaseOrderService {
         existingOrder.setShippingCost(updatedPurchaseOrder.getShippingCost());
         existingOrder.setTotalPrice(updatedPurchaseOrder.getTotalPrice());
         existingOrder.setStatus(updatedPurchaseOrder.getStatus());
+        existingOrder.setDate(updatedPurchaseOrder.getDate());
+
+        existingOrder.setLabId(updatedPurchaseOrder.getLabId());
+        existingOrder.setUser(updatedPurchaseOrder.getUser());
+        existingOrder.setSupplierId(updatedPurchaseOrder.getSupplierId());
+
         existingOrder.setLaboratory(updatedPurchaseOrder.getLaboratory());
         existingOrder.setUser(updatedPurchaseOrder.getUser());
         existingOrder.setSupplier(updatedPurchaseOrder.getSupplier());

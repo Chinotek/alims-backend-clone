@@ -37,6 +37,8 @@ public class InventoryService {
     public Inventory updateInventory(Long id, Inventory updatedInventory) {
         return inventoryRepository.findById(id)
                 .map(existingInventory -> {
+                    existingInventory.setInventoryLogId(updatedInventory.getInventoryLogId());
+                    existingInventory.setMaterialId(updatedInventory.getMaterialId());
                     existingInventory.setMaterial(updatedInventory.getMaterial());
                     existingInventory.setInventoryLog(updatedInventory.getInventoryLog());
                     existingInventory.setQty(updatedInventory.getQty());

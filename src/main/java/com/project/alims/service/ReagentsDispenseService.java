@@ -40,6 +40,13 @@ public class ReagentsDispenseService {
             reagentsDispense.setRemainingQty(updatedReagentsDispense.getRemainingQty());
             reagentsDispense.setRemarks(updatedReagentsDispense.getRemarks());
             reagentsDispense.setAnalyst(updatedReagentsDispense.getAnalyst());
+
+            reagentsDispense.setReagentId(updatedReagentsDispense.getReagentId());
+            reagentsDispense.setReagent(updatedReagentsDispense.getReagent());
+
+            reagentsDispense.setUserId(updatedReagentsDispense.getUserId());
+            reagentsDispense.setUser(updatedReagentsDispense.getUser());
+
             return reagentsDispenseRepository.save(reagentsDispense);
         }).orElseThrow(() -> new RuntimeException("ReagentsDispense not found with id " + id));
     }

@@ -32,6 +32,12 @@ public class BorrowFormService {
 
     public BorrowForm updateBorrowForm(Long id, BorrowForm updatedBorrowForm) {
         return borrowFormRepository.findById(id).map(borrowForm -> {
+
+            borrowForm.setUserId(updatedBorrowForm.getUserId());
+            borrowForm.setMaterialId(updatedBorrowForm.getMaterialId());
+            borrowForm.setUser(updatedBorrowForm.getUser());
+            borrowForm.setMaterial(updatedBorrowForm.getMaterial());
+
             borrowForm.setDateBorrowed(updatedBorrowForm.getDateBorrowed());
             borrowForm.setDetailsOfBorrowed(updatedBorrowForm.getDetailsOfBorrowed());
             borrowForm.setEquipment(updatedBorrowForm.getEquipment());

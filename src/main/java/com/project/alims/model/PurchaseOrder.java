@@ -2,6 +2,7 @@ package com.project.alims.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,6 +22,9 @@ public class PurchaseOrder {
 
     @Column(nullable = false)
     private String status;
+
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
@@ -62,17 +66,26 @@ public class PurchaseOrder {
 
     public PurchaseOrder() {}
 
-    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, Long labId, Laboratory laboratory, Long userId, User user, Long supplierId, Supplier supplier) {
+    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDate date, Long labId, Laboratory laboratory, Long userId, User user, Long supplierId, Supplier supplier) {
         this.purchaseOrderId = purchaseOrderId;
         this.shippingCost = shippingCost;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.date = date;
         this.labId = labId;
         this.laboratory = laboratory;
         this.userId = userId;
         this.user = user;
         this.supplierId = supplierId;
         this.supplier = supplier;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Long getPurchaseOrderId() {

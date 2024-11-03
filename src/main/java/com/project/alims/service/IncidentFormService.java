@@ -35,6 +35,9 @@ public class IncidentFormService {
         IncidentForm existingIncidentForm = incidentFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident Form not found with ID: " + id));
 
+        existingIncidentForm.setUserId(updatedIncidentForm.getUserId());
+        existingIncidentForm.setUser(updatedIncidentForm.getUser());
+
         existingIncidentForm.setDate(updatedIncidentForm.getDate());
         existingIncidentForm.setTime(updatedIncidentForm.getTime());
         existingIncidentForm.setMaterialsInvolved(updatedIncidentForm.getMaterialsInvolved());

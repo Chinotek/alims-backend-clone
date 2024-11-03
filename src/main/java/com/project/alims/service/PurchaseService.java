@@ -33,17 +33,21 @@ public class PurchaseService {
 
     // Update an existing purchase order by its ID
     public Purchase updatePurchase(Long PurchaseId, Purchase updatedPurchase) {
-        Purchase existingOrder = purchaseRepository.findById(PurchaseId)
+        Purchase existingPurchase = purchaseRepository.findById(PurchaseId)
                 .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + PurchaseId));
 
         // Update fields
-        existingOrder.setMaterial(updatedPurchase.getMaterial());
-        existingOrder.setQty(updatedPurchase.getQty());
-        existingOrder.setDescription(updatedPurchase.getDescription());
-        existingOrder.setUnitPrice(updatedPurchase.getUnitPrice());
+        existingPurchase.setPurchaseOrderId(updatedPurchase.getPurchaseOrderId());
+        existingPurchase.setPurchaseOrder(updatedPurchase.getPurchaseOrder());
+        existingPurchase.setMaterialId(updatedPurchase.getMaterialId());
+        existingPurchase.setMaterial(updatedPurchase.getMaterial());
+
+        existingPurchase.setQty(updatedPurchase.getQty());
+        existingPurchase.setDescription(updatedPurchase.getDescription());
+        existingPurchase.setUnitPrice(updatedPurchase.getUnitPrice());
 
         // updatedAt will be handled by @PreUpdate
-        return purchaseRepository.save(existingOrder);
+        return purchaseRepository.save(existingPurchase);
     }
 
     // Delete a purchase order by its ID

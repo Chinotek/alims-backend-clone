@@ -29,8 +29,6 @@ public class SupplierService {
     }
 
     public Supplier createSupplier(Supplier supplier) {
-        supplier.setCreatedAt(LocalDateTime.now());
-        supplier.setUpdatedAt(LocalDateTime.now());
         return supplierRepository.save(supplier);
     }
 
@@ -43,7 +41,6 @@ public class SupplierService {
             supplier.setEmail(supplierDetails.getEmail());
             supplier.setAddress(supplierDetails.getAddress());
             supplier.setPhoneNumber(supplierDetails.getPhoneNumber());
-            supplier.setUpdatedAt(LocalDateTime.now());
             return supplierRepository.save(supplier);
         } else {
             throw new RuntimeException("Supplier not found");

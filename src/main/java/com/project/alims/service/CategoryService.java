@@ -13,7 +13,6 @@ import java.util.Optional;
 @Service
 public class CategoryService {
 
-    @Autowired
     private final CategoryRepository categoryRepository;
 
     @Autowired
@@ -22,8 +21,6 @@ public class CategoryService {
     }
 
     public Category createCategory(Category category) {
-        category.setCreatedAt(LocalDateTime.now());
-        category.setUpdatedAt(LocalDateTime.now());
         return categoryRepository.save(category);
     }
 
@@ -52,11 +49,9 @@ public class CategoryService {
 
         if (existingCategory.isPresent()) {
             Category category = existingCategory.get();
-            category.setShortname(updatedCategory.getShortname());
+            category.setShortName(updatedCategory.getShortName());
             category.setSubcategory(updatedCategory.getSubcategory());
-            category.setLaboratory(updatedCategory.getLaboratory());
-            category.setUpdatedAt(LocalDateTime.now());
-
+            category.setLabId(updatedCategory.getLabId());
             return categoryRepository.save(category);
         } else {
             throw new RuntimeException("Category not found with ID: " + id);

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "borrow_forms")
+@Table(name = "borrow-forms")
 public class BorrowForm {
 
     @Id

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "disposal_form")
+@Table(name = "disposal-form")
 public class DisposalForm {
 
     @Id

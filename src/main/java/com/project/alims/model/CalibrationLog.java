@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "calibration_logs")
+@Table(name = "calibration-logs")
 public class CalibrationLog {
 
     @Id

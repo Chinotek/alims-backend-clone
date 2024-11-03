@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +20,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final JavaMailSender javaMailSender;
     private final List<User> loggedInUsers;
+
+    private static final int TEMP_PASSWORD_LENGTH = 10;
+    private static final SecureRandom random = new SecureRandom();
+    private static final String CHARACTER_SPACE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     @Autowired
     public UserService(UserRepository userRepository, JavaMailSender javaMailSender, List<User> loggedInUsers){
@@ -35,11 +40,28 @@ public class UserService {
         return String.valueOf(randomNumber);  // Convert the integer to a String
     }
 
-    public void sendEmail(String to, String name, String subject, String code) throws MessagingException {
+    // 1 - Send OTP
+    // 2 - Send Temp Password
+    public void sendEmail(String to, String name, String subject, String code, int emailCode) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         message.setRecipients(MimeMessage.RecipientType.TO, to);
         message.setSubject(subject);
+
+        String containerMessage = "<p> Invalid Email Code sent to method <p>";
+        if (emailCode == 1) {
+            // Send OTP
+            containerMessage = "<h1>Hello ALIMS, " + name + "!</h1>" +
+                    "<p>To proceed with your account creation, please enter your One Time Password (OTP) on the verification page.</p>" +
+                    "<p>Your OTP is <span class='code'>" + code + "</span>.</p>";
+
+        } else if (emailCode == 2) {
+            // Send Temp Password
+            containerMessage = "<h1>Hello " + name + "!</h1>" +
+                    "<p>To access your account, please use this temporary password. <span class='code'>" + code + "</span>.</p>" +
+                    "<p>Please log in and replace this temporary password before it expires in 24 hours</p>" +
+                    "<p>In the event that you did not request this, please file a report our website and change your password promptly</p>";
+        }
 
         // Improved HTML content with medical-themed styles
         String htmlContent = "<html>" +
@@ -49,15 +71,13 @@ public class UserService {
                 ".container { background-color: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }" +
                 "h1 { color: #004080; text-align: center; }" +
                 "p { color: #333333; font-size: 16px; line-height: 1.5; }" +
-                ".otp { font-weight: bold; font-size: 20px; color: #007bff; padding: 10px; border: 2px solid #007bff; border-radius: 5px; display: inline-block; margin-top: 10px; }" +
+                ".code { font-weight: bold; font-size: 20px; color: #007bff; padding: 10px; border: 2px solid #007bff; border-radius: 5px; display: inline-block; margin-top: 10px; }" +
                 ".footer { margin-top: 20px; font-size: 14px; color: #777777; text-align: center; }" +
                 "</style>" +
                 "</head>" +
                 "<body>" +
                 "<div class='container'>" +
-                "<h1>Welcome to ALIMS, " + name + "!</h1>" +
-                "<p>To proceed with your account creation, please enter your One Time Password (OTP) on the verification page.</p>" +
-                "<p>Your OTP is <span class='otp'>" + code + "</span>.</p>" +
+                containerMessage +
                 "</div>" +
                 "<div class='footer'>" +
                 "<p>Thank you for choosing ALIMS!</p>" +
@@ -74,7 +94,7 @@ public class UserService {
 
     public void sendVerification(String email, String name, String code) throws MessagingException {
         String subject = "Account Verification";
-        sendEmail(email, name, subject, code);
+        sendEmail(email, name, subject, code, 1);
     }
 
     public ResponseEntity<String> addUser(User user) {
@@ -193,7 +213,7 @@ public class UserService {
         if (user != null) {
             userRepository.deleteById(userId);
         } else {
-            throw new RuntimeException("Laboratory not found with ID: " + userId);
+            throw new RuntimeException("User not found with ID: " + userId);
         }
     }
     public String login(String identifier, String password) {
@@ -222,4 +242,36 @@ public class UserService {
             return new ResponseEntity<>("User not found or already logged out", HttpStatus.NOT_FOUND);
         }
     }
+
+    public String forgotPassword(String email) throws MessagingException {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            String subject = "Temporary Password";
+
+            String username = user.getUsername();
+            String randomPassword = generateRandomPassword();
+
+            sendEmail(email, username, subject, randomPassword, 1);
+
+            BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+            String encryptedPassword = bcrypt.encode(randomPassword);
+            user.setPassword(encryptedPassword);
+            userRepository.save(user);
+
+        } else {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+        return "Temporary password sent";
+    }
+
+    public static String generateRandomPassword() {
+        StringBuilder password = new StringBuilder(TEMP_PASSWORD_LENGTH);
+
+        for (int i = 0; i < TEMP_PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTER_SPACE.length());
+            password.append(CHARACTER_SPACE.charAt(index));
+        }
+        return password.toString();
+    }
+
 }

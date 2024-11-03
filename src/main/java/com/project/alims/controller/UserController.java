@@ -2,6 +2,7 @@ package com.project.alims.controller;
 
 import com.project.alims.model.User;
 import com.project.alims.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,5 +91,17 @@ public class UserController {
         }
     }
 
+    // forgot password
+    @PutMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        try {
+            String result = userService.forgotPassword(email);
+            return ResponseEntity.ok(result);
+        } catch (MessagingException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

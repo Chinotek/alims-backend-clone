@@ -251,7 +251,7 @@ public class UserService {
             String username = user.getUsername();
             String randomPassword = generateRandomPassword();
 
-            sendEmail(email, username, subject, randomPassword, 1);
+            sendEmail(email, username, subject, randomPassword, 2);
 
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
             String encryptedPassword = bcrypt.encode(randomPassword);

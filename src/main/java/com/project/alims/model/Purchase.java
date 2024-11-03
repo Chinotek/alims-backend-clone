@@ -16,14 +16,14 @@ public class Purchase {
     @Column(name = "purchase_order_id")
     private Long purchaseOrderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "purchase_order_id", referencedColumnName = "purchase_order_id", insertable = false, updatable = false)
     private PurchaseOrder purchaseOrder;  // Foreign key to Materials
 
     @Column(name = "material_id")
     private Long materialId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material material;  // Foreign key to Materials
 

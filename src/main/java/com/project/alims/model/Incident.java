@@ -17,14 +17,14 @@ public class Incident {
     @Column(name = "material_id")
     private Long materialId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material material;  // Foreign key to Materials
 
     @Column(name = "form_id")
     private Long formId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "form_id", referencedColumnName = "incident_form_id", insertable = false, updatable = false)
     private IncidentForm incidentForm;  // Foreign key to Incident Form
 

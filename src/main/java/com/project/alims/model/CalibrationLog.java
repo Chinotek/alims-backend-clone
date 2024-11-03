@@ -15,7 +15,7 @@ public class CalibrationLog {
     @Column(name = "user_id")
     private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;  // Foreign key to User model
 

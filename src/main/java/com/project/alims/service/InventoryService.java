@@ -26,6 +26,10 @@ public class InventoryService {
         return inventoryRepository.findById(id);
     }
 
+    public List<Inventory> getAllInventoryItems(Long inventoryLogId) {
+        return inventoryRepository.findAllByInventoryLogId(inventoryLogId);
+    }
+
     public Inventory createInventory(Inventory inventory) {
         return inventoryRepository.save(inventory);
     }

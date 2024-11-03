@@ -52,14 +52,30 @@ public class Inventory {
     // Constructors, Getters, and Setters
     public Inventory() {}
 
-    public Inventory(Long inventoryId, Material material, InventoryLog inventoryLog, Integer qty, String unit, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+    public Inventory(Long inventoryId, Long materialId, Material material, Long inventoryLogId, InventoryLog inventoryLog, Integer qty, String unit) {
         this.inventoryId = inventoryId;
+        this.materialId = materialId;
         this.material = material;
+        this.inventoryLogId = inventoryLogId;
         this.inventoryLog = inventoryLog;
         this.qty = qty;
         this.unit = unit;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
+    }
+
+    public Long getInventoryLogId() {
+        return inventoryLogId;
+    }
+
+    public void setInventoryLogId(Long inventoryLogId) {
+        this.inventoryLogId = inventoryLogId;
     }
 
     public Long getInventoryId() {

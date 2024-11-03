@@ -17,7 +17,7 @@ public class CalibrationLog {
     private User user;  // Foreign key to User model
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "item_code", referencedColumnName = "material_id", nullable = false)
     private Material material;  // Foreign key to Material model
 
     @Column(name = "calibration_date", nullable = false)

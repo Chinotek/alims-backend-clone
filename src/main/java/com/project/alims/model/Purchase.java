@@ -18,7 +18,7 @@ public class Purchase {
     private PurchaseOrder purchaseOrder;  // Foreign key to Materials
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "item_code", referencedColumnName = "material_id", nullable = false)
     private Material material;  // Foreign key to Materials
 
     @Column(nullable = false)

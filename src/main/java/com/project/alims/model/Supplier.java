@@ -9,7 +9,7 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "supplier_id")
     private Long supplierId;
 
     @Column(name = "company_name", nullable = false, unique = true)
@@ -33,7 +33,31 @@ public class Supplier {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // Getters and Setters
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public Supplier() {
+
+    }
+
+    public Supplier(Long supplierId, String companyName, String contactPerson, String email, String address, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.supplierId = supplierId;
+        this.companyName = companyName;
+        this.contactPerson = contactPerson;
+        this.email = email;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Long getSupplierId() {
         return supplierId;
@@ -84,19 +108,4 @@ public class Supplier {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

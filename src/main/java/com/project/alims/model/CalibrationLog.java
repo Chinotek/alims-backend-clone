@@ -12,12 +12,18 @@ public class CalibrationLog {
     @Column(name = "calibration_id")
     private Long calibrationId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;  // Foreign key to User model
 
+    @Column(name = "material_id")
+    private Long materialId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "material_id", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
     private Material material;  // Foreign key to Material model
 
     @Column(name = "calibration_date", nullable = false)
@@ -53,10 +59,11 @@ public class CalibrationLog {
     public CalibrationLog() {
     }
 
-    // Parameterized constructor
-    public CalibrationLog(User user, Material material, LocalDateTime calibrationDate, LocalDateTime nextCalibration,
-                          String notes, String attachments) {
+    public CalibrationLog(Long calibrationId, Long userId, User user, Long materialId, Material material, LocalDateTime calibrationDate, LocalDateTime nextCalibration, String notes, String attachments) {
+        this.calibrationId = calibrationId;
+        this.userId = userId;
         this.user = user;
+        this.materialId = materialId;
         this.material = material;
         this.calibrationDate = calibrationDate;
         this.nextCalibration = nextCalibration;
@@ -128,5 +135,21 @@ public class CalibrationLog {
 
     public LocalDateTime getDateUpdated() {
         return dateUpdated;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
     }
 }

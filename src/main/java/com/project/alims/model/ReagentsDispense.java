@@ -13,9 +13,15 @@ public class ReagentsDispense {
     @Column(name = "dispense_id")
     private Long dispenseId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "reagent_id")
+    private Long reagentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reagent_id", referencedColumnName = "id", nullable = false)
@@ -65,11 +71,11 @@ public class ReagentsDispense {
     // Constructors
     public ReagentsDispense() {}
 
-    public ReagentsDispense(Long dispenseId, User user, Reagents reagent, String name, LocalDate date,
-                            Integer totalNoContainers, String lotNo, Double qtyDispensed, Double remainingQty,
-                            String remarks, String analyst, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+    public ReagentsDispense(Long dispenseId, Long userId, User user, Long reagentId, Reagents reagent, String name, LocalDate date, Integer totalNoContainers, String lotNo, Double qtyDispensed, Double remainingQty, String remarks, String analyst) {
         this.dispenseId = dispenseId;
+        this.userId = userId;
         this.user = user;
+        this.reagentId = reagentId;
         this.reagent = reagent;
         this.name = name;
         this.date = date;
@@ -79,8 +85,6 @@ public class ReagentsDispense {
         this.remainingQty = remainingQty;
         this.remarks = remarks;
         this.analyst = analyst;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
     }
 
     // Getters and Setters
@@ -186,5 +190,21 @@ public class ReagentsDispense {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getReagentId() {
+        return reagentId;
+    }
+
+    public void setReagentId(Long reagentId) {
+        this.reagentId = reagentId;
     }
 }

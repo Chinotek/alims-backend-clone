@@ -13,12 +13,18 @@ public class Purchase {
     @Column(name = "purchase_id")
     private Long purchaseId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_order", referencedColumnName = "purchase_order_id", nullable = false)
-    private PurchaseOrder purchaseOrder;  // Foreign key to Materials
+    @Column(name = "purchase_order_id")
+    private Long purchaseOrderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "material_id", nullable = false)
+    @JoinColumn(name = "purchase_order_id", referencedColumnName = "purchase_order_id", nullable = false)
+    private PurchaseOrder purchaseOrder;  // Foreign key to Materials
+
+    @Column(name = "material_id")
+    private Long materialId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
     private Material material;  // Foreign key to Materials
 
     @Column(nullable = false)
@@ -50,15 +56,15 @@ public class Purchase {
     public Purchase() {
     }
 
-    public Purchase(Long purchaseId, PurchaseOrder purchaseOrder, Material material, Integer qty, String description, BigDecimal unitPrice, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+    public Purchase(Long purchaseId, Long purchaseOrderId, PurchaseOrder purchaseOrder, Long materialId, Material material, Integer qty, String description, BigDecimal unitPrice) {
         this.purchaseId = purchaseId;
+        this.purchaseOrderId = purchaseOrderId;
         this.purchaseOrder = purchaseOrder;
+        this.materialId = materialId;
         this.material = material;
         this.qty = qty;
         this.description = description;
         this.unitPrice = unitPrice;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
     }
 
     // Getters and Setters
@@ -124,5 +130,21 @@ public class Purchase {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Long getPurchaseOrderId() {
+        return purchaseOrderId;
+    }
+
+    public void setPurchaseOrderId(Long purchaseOrderId) {
+        this.purchaseOrderId = purchaseOrderId;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
     }
 }

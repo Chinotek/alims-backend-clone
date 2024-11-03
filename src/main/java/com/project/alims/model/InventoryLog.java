@@ -13,6 +13,9 @@ public class InventoryLog {
     @Column(name = "inventory_log_id")
     private Long inventoryLogId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
@@ -42,13 +45,12 @@ public class InventoryLog {
 
     public InventoryLog() {}
 
-    public InventoryLog(Long inventoryLogId, User user, LocalDate date, String remarks, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+    public InventoryLog(Long inventoryLogId, Long userId, User user, LocalDate date, String remarks) {
         this.inventoryLogId = inventoryLogId;
+        this.userId = userId;
         this.user = user;
         this.date = date;
         this.remarks = remarks;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
     }
 
     public Long getInventoryLogId() {
@@ -97,5 +99,13 @@ public class InventoryLog {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

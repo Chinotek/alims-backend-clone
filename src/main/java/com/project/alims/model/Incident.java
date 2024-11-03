@@ -19,7 +19,7 @@ public class Incident {
     private Material material;  // Foreign key to Materials
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "form_id", referencedColumnName = "incident_id", nullable = false)
+    @JoinColumn(name = "form_id", referencedColumnName = "incident_form_id", nullable = false)
     private IncidentForm incidentForm;  // Foreign key to Incident Form
 
     @Column(name = "qty")

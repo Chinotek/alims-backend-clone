@@ -23,7 +23,7 @@ public class CalibrationLogService {
     }
 
     // Find all CalibrationLogs
-    public List<CalibrationLog> findAllCalibrationLogs() {
+    public List<CalibrationLog> getAllCalibrationLogs() {
         return calibrationLogRepository.findAll();
     }
 
@@ -35,7 +35,7 @@ public class CalibrationLogService {
 
     // Find CalibrationLogs by userId
     public List<CalibrationLog> findCalibrationLogsByUserId(Long userId) {
-        return calibrationLogRepository.findByUserId(userId);
+        return calibrationLogRepository.findByUserUserId(userId);
     }
 
     // Find CalibrationLogs by item_code (Material)
@@ -51,7 +51,6 @@ public class CalibrationLogService {
             existingCalibrationLog.setNextCalibration(updatedCalibrationLog.getNextCalibration());
             existingCalibrationLog.setNotes(updatedCalibrationLog.getNotes());
             existingCalibrationLog.setAttachments(updatedCalibrationLog.getAttachments());
-            // dateUpdated will be updated by @PreUpdate in the entity class
             return calibrationLogRepository.save(existingCalibrationLog);
         } else {
             throw new RuntimeException("CalibrationLog not found with ID: " + calibrationId);

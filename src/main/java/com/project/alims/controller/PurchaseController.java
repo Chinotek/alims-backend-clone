@@ -36,7 +36,7 @@ public class PurchaseController {
     // Get purchase order by ID
     @GetMapping("/{id}")
     public ResponseEntity<Purchase> getPurchaseById(@PathVariable Long id) {
-        Purchase purchase = purchaseService.findById(id);
+        Purchase purchase = purchaseService.findByPurchaseId(id);
         if (purchase != null) {
             return ResponseEntity.ok(purchase);
         } else {

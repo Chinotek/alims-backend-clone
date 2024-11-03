@@ -12,7 +12,7 @@ public class IncidentForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "incident_form_id")
-    private Long incidentId;
+    private Long incidentFormId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
@@ -56,8 +56,8 @@ public class IncidentForm {
     // Constructors
     public IncidentForm() {}
 
-    public IncidentForm(Long incidentId, User user, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String attachments, LocalDateTime creationDate, LocalDateTime dateUpdated) {
-        this.incidentId = incidentId;
+    public IncidentForm(Long incidentFormId, User user, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String attachments, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+        this.incidentFormId = incidentFormId;
         this.user = user;
         this.date = date;
         this.time = time;
@@ -70,13 +70,12 @@ public class IncidentForm {
     }
 
     // Getters and Setters
-
-    public Long getIncidentId() {
-        return incidentId;
+    public Long getIncidentFormId() {
+        return incidentFormId;
     }
 
-    public void setIncidentId(Long incidentId) {
-        this.incidentId = incidentId;
+    public void setIncidentFormId(Long incidentFormId) {
+        this.incidentFormId = incidentFormId;
     }
 
     public User getUser() {

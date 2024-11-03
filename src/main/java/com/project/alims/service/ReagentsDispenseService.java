@@ -26,8 +26,8 @@ public class ReagentsDispenseService {
         return reagentsDispenseRepository.findAll();
     }
 
-    public Optional<ReagentsDispense> getReagentsDispenseById(Long id) {
-        return reagentsDispenseRepository.findById(id);
+    public ReagentsDispense findByDispenseId(Long id) {
+        return reagentsDispenseRepository.findById(id).orElse(null);
     }
 
     public ReagentsDispense updateReagentsDispense(Long id, ReagentsDispense updatedReagentsDispense) {

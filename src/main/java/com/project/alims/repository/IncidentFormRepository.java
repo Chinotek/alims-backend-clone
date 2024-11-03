@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface IncidentFormRepository extends JpaRepository<IncidentForm, Long> {
-    List<IncidentForm> findByUserId(Long userId);
+    List<IncidentForm> findByUserUserId(Long userId);
 }

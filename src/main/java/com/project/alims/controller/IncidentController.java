@@ -1,6 +1,7 @@
 package com.project.alims.controller;
 
 import com.project.alims.model.Incident;
+import com.project.alims.model.PurchaseOrder;
 import com.project.alims.service.IncidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,12 @@ public class IncidentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Incident> getIncidentById(@PathVariable Long id) {
-        return incidentService.getIncidentById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Incident incident = incidentService.findByIncidentId(id);
+        if (incident != null) {
+            return ResponseEntity.ok(incident);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")

@@ -12,9 +12,15 @@ public class Inventory {
     @Column(name = "inventory_id")
     private Long inventoryId;
 
+    @Column(name = "material_id")
+    private Long materialId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
     private Material material;
+
+    @Column(name = "inventory_log_id")
+    private Long inventoryLogId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inventory_log_id", referencedColumnName = "inventory_log_id", nullable = false)

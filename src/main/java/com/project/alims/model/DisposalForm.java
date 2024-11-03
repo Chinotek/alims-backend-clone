@@ -12,12 +12,18 @@ public class DisposalForm {
     @Column(name = "disposal_id")
     private Long disposalId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "material_id")
+    private Long materialId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
     private Material material;
 
     @Column(name = "item_description", nullable = false)
@@ -47,10 +53,11 @@ public class DisposalForm {
     // Constructors
     public DisposalForm() {}
 
-    public DisposalForm(Long disposalId, User user, Material material, String itemDescription, Integer qty,
-                        String reasonForDisposal, String disposalMethod, String disposedBy, String comments) {
+    public DisposalForm(Long disposalId, Long userId, User user, Long materialId, Material material, String itemDescription, Integer qty, String reasonForDisposal, String disposalMethod, String disposedBy, String comments) {
         this.disposalId = disposalId;
+        this.userId = userId;
         this.user = user;
+        this.materialId = materialId;
         this.material = material;
         this.itemDescription = itemDescription;
         this.qty = qty;
@@ -152,4 +159,29 @@ public class DisposalForm {
     public LocalDateTime getDateUpdated() {
         return dateUpdated;
     }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setDateUpdated(LocalDateTime dateUpdated) {
+        this.dateUpdated = dateUpdated;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
+    }
+
 }

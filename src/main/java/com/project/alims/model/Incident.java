@@ -14,9 +14,15 @@ public class Incident {
     @Column(name = "incident_id")
     private Long incidentId;
 
+    @Column(name = "material_id")
+    private Long materialId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
     private Material material;  // Foreign key to Materials
+
+    @Column(name = "form_id")
+    private Long formId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_id", referencedColumnName = "incident_form_id", nullable = false)
@@ -51,15 +57,15 @@ public class Incident {
     // Constructors
     public Incident() {}
 
-    public Incident(Long incidentId, Material material, IncidentForm incidentForm, Integer qty, String brand, String remarks, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+    public Incident(Long incidentId, Long materialId, Material material, Long formId, IncidentForm incidentForm, Integer qty, String brand, String remarks) {
         this.incidentId = incidentId;
+        this.materialId = materialId;
         this.material = material;
+        this.formId = formId;
         this.incidentForm = incidentForm;
         this.qty = qty;
         this.brand = brand;
         this.remarks = remarks;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
     }
 
     // Getters and Setters
@@ -127,5 +133,21 @@ public class Incident {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
+    }
+
+    public Long getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Long formId) {
+        this.formId = formId;
     }
 }

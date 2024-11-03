@@ -14,12 +14,18 @@ public class BorrowForm {
     @Column(name = "borrow_id")
     private Long borrowId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "material_id")
+    private Long materialId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
     private Material material;
 
     @Column(name = "date_borrowed", nullable = false)
@@ -78,12 +84,11 @@ public class BorrowForm {
     // Constructors
     public BorrowForm() {}
 
-    public BorrowForm(Long borrowId, User user, Material material, LocalDate dateBorrowed, String detailsOfBorrowed,
-                      String equipment, Integer qty, String unit, String borrowerDetail, String department,
-                      LocalTime timeBorrowed, LocalDate dateReturned, LocalTime timeReturned, String remarks,
-                      String damageMaterials, LocalDateTime creationDate, LocalDateTime dateUpdated) {
+    public BorrowForm(Long borrowId, Long userId, User user, Long materialId, Material material, LocalDate dateBorrowed, String detailsOfBorrowed, String equipment, Integer qty, String unit, String borrowerDetail, String department, LocalTime timeBorrowed, LocalDate dateReturned, LocalTime timeReturned, String remarks, String damageMaterials) {
         this.borrowId = borrowId;
+        this.userId = userId;
         this.user = user;
+        this.materialId = materialId;
         this.material = material;
         this.dateBorrowed = dateBorrowed;
         this.detailsOfBorrowed = detailsOfBorrowed;
@@ -97,8 +102,6 @@ public class BorrowForm {
         this.timeReturned = timeReturned;
         this.remarks = remarks;
         this.damageMaterials = damageMaterials;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
     }
 
     // Getters and Setters
@@ -236,5 +239,21 @@ public class BorrowForm {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
     }
 }

@@ -28,13 +28,22 @@ public class PurchaseOrder {
     @Column(name = "date_updated", nullable = false)
     private LocalDateTime dateUpdated;
 
+    @Column(name = "lab_id")
+    private Long labId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", nullable = false)
     private Laboratory laboratory;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "supplier_id")
+    private Long supplierId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
@@ -53,15 +62,16 @@ public class PurchaseOrder {
 
     public PurchaseOrder() {}
 
-    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDateTime creationDate, LocalDateTime dateUpdated, Laboratory laboratory, User user, Supplier supplier) {
+    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, Long labId, Laboratory laboratory, Long userId, User user, Long supplierId, Supplier supplier) {
         this.purchaseOrderId = purchaseOrderId;
         this.shippingCost = shippingCost;
         this.totalPrice = totalPrice;
         this.status = status;
-        this.creationDate = creationDate;
-        this.dateUpdated = dateUpdated;
+        this.labId = labId;
         this.laboratory = laboratory;
+        this.userId = userId;
         this.user = user;
+        this.supplierId = supplierId;
         this.supplier = supplier;
     }
 
@@ -135,5 +145,29 @@ public class PurchaseOrder {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public Long getLabId() {
+        return labId;
+    }
+
+    public void setLabId(Long labId) {
+        this.labId = labId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 }

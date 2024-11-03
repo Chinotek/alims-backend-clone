@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/reagents_dispense")
+@RequestMapping("/reagents-dispense")
 public class ReagentsDispenseController {
 
     private final ReagentsDispenseService reagentsDispenseService;

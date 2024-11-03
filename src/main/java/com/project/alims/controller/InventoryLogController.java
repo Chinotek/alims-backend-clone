@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/inventory_log")
+@RequestMapping("/inventory-log")
 public class InventoryLogController {
 
     private final InventoryLogService inventoryLogService;

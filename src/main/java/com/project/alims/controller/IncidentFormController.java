@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/incident_forms")
+@RequestMapping("/incident-forms")
 public class IncidentFormController {
     private final IncidentFormService incidentFormService;
 

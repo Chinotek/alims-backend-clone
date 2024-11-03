@@ -17,14 +17,14 @@ public class ReagentsDispense {
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
 
     @Column(name = "reagent_id")
     private Long reagentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reagent_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "reagent_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Reagents reagent;
 
     @Column(name = "name", nullable = false)

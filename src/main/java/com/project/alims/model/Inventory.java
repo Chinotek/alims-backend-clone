@@ -16,14 +16,14 @@ public class Inventory {
     private Long materialId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material material;
 
     @Column(name = "inventory_log_id")
     private Long inventoryLogId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inventory_log_id", referencedColumnName = "inventory_log_id", nullable = false)
+    @JoinColumn(name = "inventory_log_id", referencedColumnName = "inventory_log_id", insertable = false, updatable = false)
     private InventoryLog inventoryLog;
 
     @Column(name = "qty", nullable = false)

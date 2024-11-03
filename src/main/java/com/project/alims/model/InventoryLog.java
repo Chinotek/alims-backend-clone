@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "inventory-logs")
+@Table(name = "inventory_logs")
 public class InventoryLog {
 
     @Id

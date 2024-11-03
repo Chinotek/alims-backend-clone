@@ -22,13 +22,11 @@ public class MaterialService {
     }
 
     public Material createMaterial(Material material) {
-        material.setCreatedAt(LocalDateTime.now());
-        material.setUpdatedAt(LocalDateTime.now());
         return materialRepository.save(material);
     }
 
-    public Optional<Material> findById(Long id) {
-        return materialRepository.findById(id);
+    public Material findById(Long id) {
+        return materialRepository.findByMaterialId(id);
     }
 
     public List<Material> findAllMaterials() {
@@ -48,12 +46,13 @@ public class MaterialService {
     }
 
     public Material updateMaterial(Long id, Material updatedMaterial) {
-        return materialRepository.findById(id).map(material -> {
+        Material material = materialRepository.findByMaterialId(id);
+        if (material != null) {
             material.setItemName(updatedMaterial.getItemName());
             material.setItemCode(updatedMaterial.getItemCode());
-            material.setCategory(updatedMaterial.getCategory());
-            material.setSupplier(updatedMaterial.getSupplier());
-            material.setLaboratory(updatedMaterial.getLaboratory());
+            material.setCategoryId(updatedMaterial.getCategoryId());
+            material.setSupplierId(updatedMaterial.getSupplierId());
+            material.setLabId(updatedMaterial.getLabId());
             material.setUnit(updatedMaterial.getUnit());
             material.setLocation(updatedMaterial.getLocation());
             material.setExpiryDate(updatedMaterial.getExpiryDate());
@@ -63,9 +62,10 @@ public class MaterialService {
             material.setQuantityAvailable(updatedMaterial.getQuantityAvailable());
             material.setReorderThreshold(updatedMaterial.getReorderThreshold());
             material.setMaxThreshold(updatedMaterial.getMaxThreshold());
-            material.setUpdatedAt(LocalDateTime.now());
             return materialRepository.save(material);
-        }).orElseThrow(() -> new RuntimeException("Material not found with ID: " + id));
+        } else {
+            throw new RuntimeException("Material not found with ID: " + id);
+        }
     }
 
     public void deleteMaterial(Long id) {

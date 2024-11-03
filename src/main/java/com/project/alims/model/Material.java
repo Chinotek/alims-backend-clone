@@ -11,19 +11,30 @@ public class Material {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "material_id")
+    private Long materialId;
+
+    @Column(name = "lab_id")
+    private Long labId;
+
+    @Column(name = "category_id")
+    private Long categoryId;
+
+    @Column(name = "supplier_id")
+    private Long supplierId;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id",  referencedColumnName = "category_id", insertable = false, updatable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "supplier_id", insertable = false, updatable = false)
     private Supplier supplier;
-
     @ManyToOne
-    @JoinColumn(name = "laboratory_id", nullable = false)
+    @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", insertable = false, updatable = false)
     private Laboratory laboratory;
+
+
 
     @Column(name = "item_code", nullable = false, unique = true)
     private String itemCode;
@@ -64,14 +75,98 @@ public class Material {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // Getters and Setters
-
-    public Long getId() {
-        return id;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public Material(){
+
+    }
+
+    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.materialId = materialId;
+        this.labId = labId;
+        this.categoryId = categoryId;
+        this.supplierId = supplierId;
+        this.category = category;
+        this.supplier = supplier;
+        this.laboratory = laboratory;
+        this.itemCode = itemCode;
+        this.itemName = itemName;
+        this.unit = unit;
+        this.location = location;
+        this.expiryDate = expiryDate;
+        this.cost = cost;
+        this.description = description;
+        this.notes = notes;
+        this.quantityAvailable = quantityAvailable;
+        this.reorderThreshold = reorderThreshold;
+        this.maxThreshold = maxThreshold;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
+    }
+
+    public Long getLabId() {
+        return labId;
+    }
+
+    public void setLabId(Long labId) {
+        this.labId = labId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    public Laboratory getLaboratory() {
+        return laboratory;
+    }
+
+    public void setLaboratory(Laboratory laboratory) {
+        this.laboratory = laboratory;
     }
 
     public String getItemCode() {
@@ -160,45 +255,5 @@ public class Material {
 
     public void setMaxThreshold(Integer maxThreshold) {
         this.maxThreshold = maxThreshold;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Laboratory getLaboratory() {
-        return laboratory;
-    }
-
-    public void setLaboratory(Laboratory laboratory) {
-        this.laboratory = laboratory;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
     }
 }

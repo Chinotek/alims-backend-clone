@@ -37,7 +37,7 @@ public class PurchaseOrder {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "supplier_id", nullable = false)
     private Supplier supplier;
 
     @PrePersist

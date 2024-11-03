@@ -17,7 +17,7 @@ public class DisposalForm {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "item_code", referencedColumnName = "material_id", nullable = false)
     private Material material;
 
     @Column(name = "item_description", nullable = false)

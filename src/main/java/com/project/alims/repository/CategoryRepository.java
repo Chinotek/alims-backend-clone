@@ -15,7 +15,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Category findBySubcategory(String subcategory);
 
-    List<Category> findByCreatedAtAfter(LocalDateTime dateTime);
-
-    List<Category> findByUpdatedAtBefore(LocalDateTime dateTime);
+    Category findByCategoryId(Long categoryId);
 }

@@ -13,4 +13,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findByCategory(Category category);
     List<Material> findBySupplier(Supplier supplier);
     Material findByItemCode(String itemCode);
+
+    Material findByMaterialId(Long materialId);
 }

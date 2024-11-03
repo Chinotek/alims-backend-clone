@@ -13,7 +13,7 @@ public class Inventory {
     private Long inventoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "item_code", referencedColumnName = "material_id", nullable = false)
     private Material material;
 
     @ManyToOne(fetch = FetchType.LAZY)

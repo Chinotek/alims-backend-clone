@@ -34,7 +34,7 @@ public class MaterialController {
         return new ResponseEntity<>(createdMaterial, HttpStatus.CREATED);
     }
 
-    @GetMapping("/materials")
+    @GetMapping("/all")
     public ResponseEntity<List<Material>> getAllMaterials() {
         List<Material> materials = materialService.findAllMaterials();
         return new ResponseEntity<>(materials, HttpStatus.OK);
@@ -42,10 +42,14 @@ public class MaterialController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Material> getMaterialById(@PathVariable Long id) {
-        Optional<Material> material = materialService.findById(id);
-        return material.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Material material = materialService.findById(id);
+        if (material != null) {
+            return new ResponseEntity<>(material, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
 
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<Material>> getMaterialsByCategory(@PathVariable Long categoryId) {

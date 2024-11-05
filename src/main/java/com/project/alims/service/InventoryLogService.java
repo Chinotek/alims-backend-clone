@@ -34,7 +34,12 @@ public class InventoryLogService {
         return inventoryLogRepository.findById(id)
                 .map(existingLog -> {
                     existingLog.setDate(updatedInventoryLog.getDate());
+                    existingLog.setSource(updatedInventoryLog.getSource());
                     existingLog.setRemarks(updatedInventoryLog.getRemarks());
+
+                    existingLog.setMaterialId(updatedInventoryLog.getMaterialId());
+                    existingLog.setMaterial(updatedInventoryLog.getMaterial());
+
                     existingLog.setUserId(updatedInventoryLog.getUserId());
                     existingLog.setUser(updatedInventoryLog.getUser());
                     return inventoryLogRepository.save(existingLog);

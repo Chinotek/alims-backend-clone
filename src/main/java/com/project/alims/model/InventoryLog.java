@@ -20,36 +20,32 @@ public class InventoryLog {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
 
+    @Column(name = "material_id")
+    private Long materialId;
+
+    @ManyToOne()
+    @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
+    private Material material;
+
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
+    @Column(name = "source")
+    private String source;
 
     @Column(name = "remarks")
     private String remarks;
 
-    @Column(name = "creation_date", nullable = false, updatable = false)
-    private LocalDateTime creationDate;
-
-    @Column(name = "date_updated", nullable = false)
-    private LocalDateTime dateUpdated;
-
-    @PrePersist
-    protected void onCreate() {
-        creationDate = LocalDateTime.now();
-        dateUpdated = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        dateUpdated = LocalDateTime.now();
-    }
-
     public InventoryLog() {}
 
-    public InventoryLog(Long inventoryLogId, Long userId, User user, LocalDate date, String remarks) {
+    public InventoryLog(Long inventoryLogId, Long userId, User user, Long materialId, Material material, LocalDate date, String source, String remarks) {
         this.inventoryLogId = inventoryLogId;
         this.userId = userId;
         this.user = user;
+        this.materialId = materialId;
+        this.material = material;
         this.date = date;
+        this.source = source;
         this.remarks = remarks;
     }
 
@@ -85,20 +81,28 @@ public class InventoryLog {
         this.remarks = remarks;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public Long getMaterialId() {
+        return materialId;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
     }
 
-    public LocalDateTime getDateUpdated() {
-        return dateUpdated;
+    public Material getMaterial() {
+        return material;
     }
 
-    public void setDateUpdated(LocalDateTime dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public Long getUserId() {
@@ -108,4 +112,5 @@ public class InventoryLog {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
 }

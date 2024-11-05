@@ -30,6 +30,9 @@ public class InventoryLog {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
     @Column(name = "source")
     private String source;
 
@@ -38,13 +41,14 @@ public class InventoryLog {
 
     public InventoryLog() {}
 
-    public InventoryLog(Long inventoryLogId, Long userId, User user, Long materialId, Material material, LocalDate date, String source, String remarks) {
+    public InventoryLog(Long inventoryLogId, Long userId, User user, Long materialId, Material material, LocalDate date, Integer quantity, String source, String remarks) {
         this.inventoryLogId = inventoryLogId;
         this.userId = userId;
         this.user = user;
         this.materialId = materialId;
         this.material = material;
         this.date = date;
+        this.quantity = quantity;
         this.source = source;
         this.remarks = remarks;
     }
@@ -79,6 +83,14 @@ public class InventoryLog {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Long getMaterialId() {

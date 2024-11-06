@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface DisposalFormRepository extends JpaRepository<DisposalForm, Long> {
-    List<DisposalForm> findByUserUserId(Long userId);
-    List<DisposalForm> findByMaterialItemCode(String itemCode);
+    List<DisposalForm> findByUserId(Long userId);
+    List<DisposalForm> findByMaterialId(Long materialId);
 }

@@ -1,6 +1,8 @@
 package com.project.alims.model;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,15 +24,15 @@ public class CalibrationLog {
     @Column(name = "material_id")
     private Long materialId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material material;  // Foreign key to Material model
 
     @Column(name = "calibration_date", nullable = false)
-    private LocalDateTime calibrationDate;
+    private LocalDate calibrationDate;
 
     @Column(name = "next_calibration", nullable = false)
-    private LocalDateTime nextCalibration;
+    private LocalDate nextCalibration;
 
     @Column(length = 1000)
     private String notes;
@@ -59,7 +61,7 @@ public class CalibrationLog {
     public CalibrationLog() {
     }
 
-    public CalibrationLog(Long calibrationId, Long userId, User user, Long materialId, Material material, LocalDateTime calibrationDate, LocalDateTime nextCalibration, String notes, String attachments) {
+    public CalibrationLog(Long calibrationId, Long userId, User user, Long materialId, Material material, LocalDate calibrationDate, LocalDate nextCalibration, String notes, String attachments) {
         this.calibrationId = calibrationId;
         this.userId = userId;
         this.user = user;
@@ -97,20 +99,28 @@ public class CalibrationLog {
         this.material = material;
     }
 
-    public LocalDateTime getCalibrationDate() {
+    public LocalDate getCalibrationDate() {
         return calibrationDate;
     }
 
-    public void setCalibrationDate(LocalDateTime calibrationDate) {
+    public void setCalibrationDate(LocalDate calibrationDate) {
         this.calibrationDate = calibrationDate;
     }
 
-    public LocalDateTime getNextCalibration() {
+    public LocalDate getNextCalibration() {
         return nextCalibration;
     }
 
-    public void setNextCalibration(LocalDateTime nextCalibration) {
+    public void setNextCalibration(LocalDate nextCalibration) {
         this.nextCalibration = nextCalibration;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setDateUpdated(LocalDateTime dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 
     public String getNotes() {

@@ -10,8 +10,8 @@ import java.util.List;
 public interface CalibrationLogRepository extends JpaRepository<CalibrationLog, Long> {
 
     // Custom query to find all calibration logs by user_id
-    List<CalibrationLog> findByUserUserId(Long userId);
+    List<CalibrationLog> findByUserId(Long userId);
 
     // Custom query to find all calibration logs by item_code (material)
-    List<CalibrationLog> findByMaterialItemCode(String itemCode);
+    List<CalibrationLog> findByMaterialId(Long userId);
 }

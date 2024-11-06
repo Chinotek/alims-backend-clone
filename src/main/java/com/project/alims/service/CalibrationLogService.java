@@ -35,19 +35,18 @@ public class CalibrationLogService {
 
     // Find CalibrationLogs by userId
     public List<CalibrationLog> findCalibrationLogsByUserId(Long userId) {
-        return calibrationLogRepository.findByUserUserId(userId);
+        return calibrationLogRepository.findByUserId(userId);
     }
 
     // Find CalibrationLogs by item_code (Material)
-    public List<CalibrationLog> findCalibrationLogsByItemCode(String itemCode) {
-        return calibrationLogRepository.findByMaterialItemCode(itemCode);
+    public List<CalibrationLog> findCalibrationLogsByMaterialId(Long materialId) {
+        return calibrationLogRepository.findByMaterialId(materialId);
     }
 
     // Update an existing CalibrationLog
     public CalibrationLog updateCalibrationLog(Long calibrationId, CalibrationLog updatedCalibrationLog) {
         CalibrationLog existingCalibrationLog = findCalibrationLogById(calibrationId);
         if (existingCalibrationLog != null) {
-
             existingCalibrationLog.setUserId(updatedCalibrationLog.getUserId());
             existingCalibrationLog.setMaterialId(updatedCalibrationLog.getMaterialId());
             existingCalibrationLog.setUser(updatedCalibrationLog.getUser());

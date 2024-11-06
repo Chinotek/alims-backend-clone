@@ -19,12 +19,6 @@ public class IncidentFormController {
         this.incidentFormService = incidentFormService;
     }
 
-    @PostMapping
-    public ResponseEntity<IncidentForm> createIncidentForm(@RequestBody IncidentForm incidentForm) {
-        IncidentForm savedIncidentForm = incidentFormService.saveIncidentForm(incidentForm);
-        return ResponseEntity.ok(savedIncidentForm);
-    }
-
     @GetMapping
     public ResponseEntity<List<IncidentForm>> getAllIncidentForms() {
         List<IncidentForm> incidentForms = incidentFormService.getAllIncidentForms();
@@ -36,6 +30,12 @@ public class IncidentFormController {
         return incidentFormService.getIncidentFormById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<IncidentForm> createIncidentForm(@RequestBody IncidentForm incidentForm) {
+        IncidentForm savedIncidentForm = incidentFormService.saveIncidentForm(incidentForm);
+        return ResponseEntity.ok(savedIncidentForm);
     }
 
     @PutMapping("/{id}")

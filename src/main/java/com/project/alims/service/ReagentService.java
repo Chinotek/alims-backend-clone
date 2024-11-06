@@ -1,6 +1,6 @@
 package com.project.alims.service;
 
-import com.project.alims.model.Reagents;
+import com.project.alims.model.Reagent;
 import com.project.alims.repository.ReagentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,29 +19,22 @@ public class ReagentService {
         this.reagentRepository = reagentRepository;
     }
 
-    public Reagents createReagent(Reagents reagent) {
-        reagent.setCreatedAt(LocalDateTime.now());
-        reagent.setUpdatedAt(LocalDateTime.now());
+    public Reagent createReagent(Reagent reagent) {
         return reagentRepository.save(reagent);
     }
 
-    public Optional<Reagents> findById(Long id) {
+    public Optional<Reagent> findById(Long id) {
         return reagentRepository.findById(id);
     }
 
-    public List<Reagents> findAllReagents() {
+    public List<Reagent> findAllReagents() {
         return reagentRepository.findAll();
     }
 
-    public Reagents updateReagent(Long id, Reagents updatedReagent) {
+    public Reagent updateReagent(Long id, Reagent updatedReagent) {
         return reagentRepository.findById(id).map(reagent -> {
+            reagent.setMaterialId(updatedReagent.getMaterialId());
             reagent.setMaterial(updatedReagent.getMaterial());
-            reagent.setQty(updatedReagent.getQty());
-            reagent.setUnit(updatedReagent.getUnit());
-            reagent.setLocation(updatedReagent.getLocation());
-            reagent.setExpiryDate(updatedReagent.getExpiryDate());
-            reagent.setCost(updatedReagent.getCost());
-            reagent.setUpdatedAt(LocalDateTime.now());
             return reagentRepository.save(reagent);
         }).orElseThrow(() -> new RuntimeException("Reagent not found with ID: " + id));
     }

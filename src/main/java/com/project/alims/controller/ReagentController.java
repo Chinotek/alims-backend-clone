@@ -1,6 +1,6 @@
 package com.project.alims.controller;
 
-import com.project.alims.model.Reagents;
+import com.project.alims.model.Reagent;
 import com.project.alims.service.ReagentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,28 +23,28 @@ public class ReagentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Reagents> createReagent(@RequestBody Reagents reagent) {
-        Reagents createdReagent = reagentService.createReagent(reagent);
+    public ResponseEntity<Reagent> createReagent(@RequestBody Reagent reagent) {
+        Reagent createdReagent = reagentService.createReagent(reagent);
         return new ResponseEntity<>(createdReagent, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Reagents>> getAllReagents() {
-        List<Reagents> reagents = reagentService.findAllReagents();
+    public ResponseEntity<List<Reagent>> getAllReagents() {
+        List<Reagent> reagents = reagentService.findAllReagents();
         return new ResponseEntity<>(reagents, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reagents> getReagentById(@PathVariable Long id) {
-        Optional<Reagents> reagent = reagentService.findById(id);
+    public ResponseEntity<Reagent> getReagentById(@PathVariable Long id) {
+        Optional<Reagent> reagent = reagentService.findById(id);
         return reagent.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Reagents> updateReagent(@PathVariable Long id, @RequestBody Reagents updatedReagent) {
+    public ResponseEntity<Reagent> updateReagent(@PathVariable Long id, @RequestBody Reagent updatedReagent) {
         try {
-            Reagents reagent = reagentService.updateReagent(id, updatedReagent);
+            Reagent reagent = reagentService.updateReagent(id, updatedReagent);
             return new ResponseEntity<>(reagent, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

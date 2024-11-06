@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reagents_dispense")
-public class ReagentsDispense {
+@Table(name = "reagent_dispense")
+public class ReagentDispense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class ReagentsDispense {
     private Long reagentId;
 
     @ManyToOne()
-    @JoinColumn(name = "reagent_id", referencedColumnName = "material_id", insertable = false, updatable = false)
-    private Reagents reagent;
+    @JoinColumn(name = "reagent_id", referencedColumnName = "reagent_id", insertable = false, updatable = false)
+    private Reagent reagent;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -40,10 +40,7 @@ public class ReagentsDispense {
     private String lotNo;
 
     @Column(name = "qty_dispensed", nullable = false)
-    private Double qtyDispensed;
-
-    @Column(name = "remaining_qty", nullable = false)
-    private Double remainingQty;
+    private Integer qtyDispensed;
 
     @Column(name = "remarks")
     private String remarks;
@@ -69,9 +66,9 @@ public class ReagentsDispense {
     }
 
     // Constructors
-    public ReagentsDispense() {}
+    public ReagentDispense() {}
 
-    public ReagentsDispense(Long dispenseId, Long userId, User user, Long reagentId, Reagents reagent, String name, LocalDate date, Integer totalNoContainers, String lotNo, Double qtyDispensed, Double remainingQty, String remarks, String analyst) {
+    public ReagentDispense(Long dispenseId, Long userId, User user, Long reagentId, Reagent reagent, String name, LocalDate date, Integer totalNoContainers, String lotNo, Integer qtyDispensed, String remarks, String analyst) {
         this.dispenseId = dispenseId;
         this.userId = userId;
         this.user = user;
@@ -82,7 +79,6 @@ public class ReagentsDispense {
         this.totalNoContainers = totalNoContainers;
         this.lotNo = lotNo;
         this.qtyDispensed = qtyDispensed;
-        this.remainingQty = remainingQty;
         this.remarks = remarks;
         this.analyst = analyst;
     }
@@ -104,11 +100,11 @@ public class ReagentsDispense {
         this.user = user;
     }
 
-    public Reagents getReagent() {
+    public Reagent getReagent() {
         return reagent;
     }
 
-    public void setReagent(Reagents reagent) {
+    public void setReagent(Reagent reagent) {
         this.reagent = reagent;
     }
 
@@ -144,20 +140,12 @@ public class ReagentsDispense {
         this.lotNo = lotNo;
     }
 
-    public Double getQtyDispensed() {
+    public Integer getQtyDispensed() {
         return qtyDispensed;
     }
 
-    public void setQtyDispensed(Double qtyDispensed) {
+    public void setQtyDispensed(Integer qtyDispensed) {
         this.qtyDispensed = qtyDispensed;
-    }
-
-    public Double getRemainingQty() {
-        return remainingQty;
-    }
-
-    public void setRemainingQty(Double remainingQty) {
-        this.remainingQty = remainingQty;
     }
 
     public String getRemarks() {

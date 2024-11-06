@@ -28,7 +28,7 @@ public class CalibrationLogController {
     }
 
     // Get all CalibrationLogs
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<CalibrationLog>> getAllCalibrationLogs() {
         List<CalibrationLog> calibrationLogs = calibrationLogService.getAllCalibrationLogs();
         return ResponseEntity.ok(calibrationLogs);
@@ -53,9 +53,9 @@ public class CalibrationLogController {
     }
 
     // Get CalibrationLogs by itemCode (Material)
-    @GetMapping("/material/{itemCode}")
-    public ResponseEntity<List<CalibrationLog>> getCalibrationLogsByItemCode(@PathVariable String itemCode) {
-        List<CalibrationLog> logs = calibrationLogService.findCalibrationLogsByItemCode(itemCode);
+    @GetMapping("/material/{materialId}")
+    public ResponseEntity<List<CalibrationLog>> getCalibrationLogsByItemCode(@PathVariable Long materialId) {
+        List<CalibrationLog> logs = calibrationLogService.findCalibrationLogsByMaterialId(materialId);
         return ResponseEntity.ok(logs);
     }
 

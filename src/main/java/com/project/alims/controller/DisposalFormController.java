@@ -27,7 +27,7 @@ public class DisposalFormController {
     }
 
     // Get all DisposalForms
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<DisposalForm>> getAllDisposalForms() {
         List<DisposalForm> forms = disposalFormService.findAllDisposalForms();
         return ResponseEntity.ok(forms);
@@ -52,9 +52,9 @@ public class DisposalFormController {
     }
 
     // Get DisposalForms by itemCode (Material)
-    @GetMapping("/material/{itemCode}")
-    public ResponseEntity<List<DisposalForm>> getDisposalFormsByItemCode(@PathVariable String itemCode) {
-        List<DisposalForm> forms = disposalFormService.findDisposalFormsByItemCode(itemCode);
+    @GetMapping("/material/{materialId}")
+    public ResponseEntity<List<DisposalForm>> getDisposalFormsByItemCode(@PathVariable Long materialId) {
+        List<DisposalForm> forms = disposalFormService.findDisposalFormsByMaterialId(materialId);
         return ResponseEntity.ok(forms);
     }
 

@@ -22,7 +22,7 @@ public class BorrowFormController {
 
     @PostMapping
     public ResponseEntity<BorrowForm> createBorrowForm(@RequestBody BorrowForm borrowForm) {
-        BorrowForm savedBorrowForm = borrowFormService.saveBorrowForm(borrowForm);
+        BorrowForm savedBorrowForm = borrowFormService.createBorrowForm(borrowForm);
         return ResponseEntity.ok(savedBorrowForm);
     }
 

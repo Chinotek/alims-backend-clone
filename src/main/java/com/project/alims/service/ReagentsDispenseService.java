@@ -1,10 +1,8 @@
 package com.project.alims.service;
 
 import com.project.alims.model.Material;
-import com.project.alims.model.Reagent;
 import com.project.alims.model.ReagentDispense;
 import com.project.alims.repository.MaterialRepository;
-import com.project.alims.repository.ReagentRepository;
 import com.project.alims.repository.ReagentsDispenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +14,11 @@ public class ReagentsDispenseService {
 
     private final ReagentsDispenseRepository reagentsDispenseRepository;
     private final MaterialRepository materialRepository;
-    private final ReagentRepository reagentRepository;
 
     @Autowired
-    public ReagentsDispenseService(ReagentsDispenseRepository reagentsDispenseRepository, MaterialRepository materialRepository, ReagentRepository reagentRepository) {
+    public ReagentsDispenseService(ReagentsDispenseRepository reagentsDispenseRepository, MaterialRepository materialRepository) {
         this.reagentsDispenseRepository = reagentsDispenseRepository;
         this.materialRepository = materialRepository;
-        this.reagentRepository = reagentRepository;
     }
 
     public List<ReagentDispense> getAllReagentsDispenses() {
@@ -31,18 +27,6 @@ public class ReagentsDispenseService {
 
     public ReagentDispense findByDispenseId(Long id) {
         return reagentsDispenseRepository.findById(id).orElse(null);
-    }
-
-    public void DeductQuantitytoReagent(Reagent existingReagentDispenseReagent, Integer deductedAmount) {
-        if (existingReagentDispenseReagent != null) {
-            // Deduct Material
-            Long reagentMaterialId = existingReagentDispenseReagent.getMaterialId();
-            Material existingReagentMaterial = materialRepository.findById(reagentMaterialId)
-                    .orElseThrow(() -> new RuntimeException("Material not found with ID: " + reagentMaterialId));
-            DeductQuantitytoMaterial(existingReagentMaterial, deductedAmount);
-        } else {
-            throw new RuntimeException("Reagent not found");
-        }
     }
 
     public Material DeductQuantitytoMaterial(Material existingReagentMaterial, Integer deductedAmount) {
@@ -58,10 +42,10 @@ public class ReagentsDispenseService {
 
     public ReagentDispense createReagentsDispense(ReagentDispense reagentDispense) {
         Integer deductedAmount = reagentDispense.getQtyDispensed();
-        Long reagentDispenseReagentId = reagentDispense.getReagentId();
-        Reagent existingReagentDispenseReagent = reagentRepository.findById(reagentDispenseReagentId)
-                .orElseThrow(() -> new RuntimeException("Reagent not found with ID: " + reagentDispenseReagentId));
-        DeductQuantitytoReagent(existingReagentDispenseReagent, deductedAmount);
+        Long reagentId = reagentDispense.getReagentId();
+        Material existingReagent = materialRepository.findById(reagentId)
+                .orElseThrow(() -> new RuntimeException("Reagent not found with ID: " + reagentId));
+        DeductQuantitytoMaterial(existingReagent, deductedAmount);
 
         return reagentsDispenseRepository.save(reagentDispense);
     }
@@ -71,8 +55,10 @@ public class ReagentsDispenseService {
                 .orElseThrow(() -> new RuntimeException("ReagentsDispense not found with id " + reagentDispenseId));
 
         Integer deductedAmount = updatedReagentDispense.getQtyDispensed() - existingReagentDispense.getQtyDispensed();
-        Reagent existingReagentDispenseReagent = existingReagentDispense.getReagent();
-        DeductQuantitytoReagent(existingReagentDispenseReagent, deductedAmount);
+        Long reagentId = updatedReagentDispense.getReagentId();
+        Material existingReagent = materialRepository.findById(reagentId)
+                .orElseThrow(() -> new RuntimeException("Reagent not found with ID: " + reagentId));
+        DeductQuantitytoMaterial(existingReagent, deductedAmount);
 
         existingReagentDispense.setName(updatedReagentDispense.getName());
         existingReagentDispense.setDate(updatedReagentDispense.getDate());

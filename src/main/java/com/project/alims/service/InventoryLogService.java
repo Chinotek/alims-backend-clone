@@ -54,9 +54,11 @@ public class InventoryLogService {
         InventoryLog existingLog = inventoryLogRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("InventoryLog not found with ID: " + id));
         Integer addedAmount = updatedInventoryLog.getQuantity() - existingLog.getQuantity();
-        Material existingLogMaterial = existingLog.getMaterial();
+        Long existingMaterialId = updatedInventoryLog.getMaterialId();
+        Material existingMaterial = materialRepository.findById(existingMaterialId)
+                .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        AddQuantitytoMaterial(existingLogMaterial, addedAmount);
+        AddQuantitytoMaterial(existingMaterial, addedAmount);
 
         existingLog.setDate(updatedInventoryLog.getDate());
         existingLog.setSource(updatedInventoryLog.getSource());

@@ -24,8 +24,8 @@ public class ReagentDispense {
     private Long reagentId;
 
     @ManyToOne()
-    @JoinColumn(name = "reagent_id", referencedColumnName = "reagent_id", insertable = false, updatable = false)
-    private Reagent reagent;
+    @JoinColumn(name = "reagent_id", referencedColumnName = "material_id", insertable = false, updatable = false)
+    private Material reagent;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -68,7 +68,7 @@ public class ReagentDispense {
     // Constructors
     public ReagentDispense() {}
 
-    public ReagentDispense(Long dispenseId, Long userId, User user, Long reagentId, Reagent reagent, String name, LocalDate date, Integer totalNoContainers, String lotNo, Integer qtyDispensed, String remarks, String analyst) {
+    public ReagentDispense(Long dispenseId, Long userId, User user, Long reagentId, Material reagent, String name, LocalDate date, Integer totalNoContainers, String lotNo, Integer qtyDispensed, String remarks, String analyst) {
         this.dispenseId = dispenseId;
         this.userId = userId;
         this.user = user;
@@ -100,11 +100,11 @@ public class ReagentDispense {
         this.user = user;
     }
 
-    public Reagent getReagent() {
+    public Material getReagent() {
         return reagent;
     }
 
-    public void setReagent(Reagent reagent) {
+    public void setReagent(Material reagent) {
         this.reagent = reagent;
     }
 

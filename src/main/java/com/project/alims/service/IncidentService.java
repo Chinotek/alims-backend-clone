@@ -57,9 +57,11 @@ public class IncidentService {
                 .orElseThrow(() -> new RuntimeException("Incident not found with ID: " + id));
 
         Integer deductedAmount = updatedIncident.getQty() - existingIncident.getQty();
-        Material existingDisposalFormMaterial = existingIncident.getMaterial();
+        Long existingMaterialId = updatedIncident.getMaterialId();
+        Material existingMaterial = materialRepository.findById(existingMaterialId)
+                .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        DeductQuantitytoMaterial(existingDisposalFormMaterial, deductedAmount);
+        DeductQuantitytoMaterial(existingMaterial, deductedAmount);
 
         existingIncident.setMaterialId(updatedIncident.getMaterialId());
         existingIncident.setMaterial(updatedIncident.getMaterial());

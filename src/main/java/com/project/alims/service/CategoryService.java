@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CategoryService {
@@ -32,16 +34,16 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public List<Category> findByLaboratory(Laboratory laboratory) {
-        return categoryRepository.findByLaboratory(laboratory);
-    }
-
     public Optional<Category> findByShortName(String shortName) {
         return Optional.ofNullable(categoryRepository.findByShortName(shortName));
     }
 
-    public Optional<Category> findBySubcategory(String subcategory) {
-        return Optional.ofNullable(categoryRepository.findBySubcategory(subcategory));
+    public List<Category> findBySubcategory(String subcategory) {
+        List<Category> subcategory1Matches = categoryRepository.findBySubcategory1(subcategory);
+        List<Category> subcategory2Matches = categoryRepository.findBySubcategory2(subcategory);
+
+        List<Category> subcategoryMatches = Stream.concat(subcategory1Matches.stream(), subcategory2Matches.stream()).toList();
+        return subcategoryMatches;
     }
 
     public Category updateCategory(Long id, Category updatedCategory) {
@@ -50,8 +52,8 @@ public class CategoryService {
         if (existingCategory.isPresent()) {
             Category category = existingCategory.get();
             category.setShortName(updatedCategory.getShortName());
-            category.setSubcategory(updatedCategory.getSubcategory());
-            category.setLabId(updatedCategory.getLabId());
+            category.setSubcategory1(updatedCategory.getSubcategory1());
+            category.setSubcategory2(updatedCategory.getSubcategory2());
             return categoryRepository.save(category);
         } else {
             throw new RuntimeException("Category not found with ID: " + id);

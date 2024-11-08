@@ -9,11 +9,9 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    List<Category> findByLaboratory(Laboratory lab);
-
     Category findByShortName(String shortName);
-
-    Category findBySubcategory(String subcategory);
+    List<Category> findBySubcategory1(String subcategory1);
+    List<Category> findBySubcategory2(String subcategory1);
 
     Category findByCategoryId(Long categoryId);
 }

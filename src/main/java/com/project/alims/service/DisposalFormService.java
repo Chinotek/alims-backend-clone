@@ -65,9 +65,11 @@ public class DisposalFormService {
                 .orElseThrow(() -> new RuntimeException("Disposal Form not found with ID: " + disposalId));
 
         Integer deductedAmount = updatedDisposalForm.getQty() - existingDisposalForm.getQty();
-        Material existingDisposalFormMaterial = existingDisposalForm.getMaterial();
+        Long existingMaterialId = updatedDisposalForm.getMaterialId();
+        Material existingMaterial = materialRepository.findById(existingMaterialId)
+                .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        DeductQuantitytoMaterial(existingDisposalFormMaterial, deductedAmount);
+        DeductQuantitytoMaterial(existingMaterial, deductedAmount);
 
         existingDisposalForm.setUserId(updatedDisposalForm.getUserId());
         existingDisposalForm.setMaterialId(updatedDisposalForm.getMaterialId());

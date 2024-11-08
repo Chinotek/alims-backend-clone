@@ -41,17 +41,17 @@ public class CategoryController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/lab/{labId}")
-    public ResponseEntity<List<Category>> getCategoriesByLaboratory(@PathVariable("labId") Laboratory laboratory) {
-        List<Category> categories = categoryService.findByLaboratory(laboratory);
-        return ResponseEntity.ok(categories);
-    }
-
     @GetMapping("/find/{shortName}")
     public ResponseEntity<Category> getCategoryByShortName(@PathVariable String shortName) {
         Optional<Category> category = categoryService.findByShortName(shortName);
         return category.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/subcategories/{subcategory}")
+    public ResponseEntity<List<Category>> getCategoryBySubcategories(@PathVariable String subcategory) {
+        List<Category> categories = categoryService.findBySubcategory(subcategory);
+        return ResponseEntity.ok(categories);
     }
 
     @PutMapping("/update/{id}")

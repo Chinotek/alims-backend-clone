@@ -11,19 +11,14 @@ public class Category {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(name = "lab_id")
-    private Long labId;
-
-    @ManyToOne()
-    @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", insertable = false, updatable = false)
-    private Laboratory laboratory;
-
-
     @Column(nullable = false, unique = true)
     private String shortName;
 
-    @Column(nullable = false, unique = true)
-    private String subcategory;
+    @Column(name = "subcategory_1", nullable = false)
+    private String subcategory1;
+
+    @Column(name = "subcategory_2")
+    private String subcategory2;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -45,14 +40,11 @@ public class Category {
     public Category(){
     }
 
-    public Category(Long categoryId, Long labId, Laboratory laboratory, String shortName, String subcategory, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Category(Long categoryId, String shortName, String subcategory1, String subcategory2) {
         this.categoryId = categoryId;
-        this.labId = labId;
-        this.laboratory = laboratory;
         this.shortName = shortName;
-        this.subcategory = subcategory;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.subcategory1 = subcategory1;
+        this.subcategory2 = subcategory2;
     }
 
     public Long getCategoryId() {
@@ -63,22 +55,6 @@ public class Category {
         this.categoryId = categoryId;
     }
 
-    public Long getLabId() {
-        return labId;
-    }
-
-    public void setLabId(Long labId) {
-        this.labId = labId;
-    }
-
-    public Laboratory getLaboratory() {
-        return laboratory;
-    }
-
-    public void setLaboratory(Laboratory laboratory) {
-        this.laboratory = laboratory;
-    }
-
     public String getShortName() {
         return shortName;
     }
@@ -87,12 +63,19 @@ public class Category {
         this.shortName = shortName;
     }
 
-    public String getSubcategory() {
-        return subcategory;
+    public String getSubcategory1() {
+        return subcategory1;
     }
 
-    public void setSubcategory(String subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategory1(String subcategory1) {
+        this.subcategory1 = subcategory1;
     }
 
+    public String getSubcategory2() {
+        return subcategory2;
+    }
+
+    public void setSubcategory2(String subcategory2) {
+        this.subcategory2 = subcategory2;
+    }
 }

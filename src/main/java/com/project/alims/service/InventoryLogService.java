@@ -25,6 +25,10 @@ public class InventoryLogService {
         return inventoryLogRepository.findAll();
     }
 
+    public List<InventoryLog> getInventoryLogsByMaterialId(Long materialId) {
+        return inventoryLogRepository.findByMaterialId(materialId);
+    }
+
     public InventoryLog findByInventoryLogId(Long id) {
         return inventoryLogRepository.findById(id).orElse(null);
     }

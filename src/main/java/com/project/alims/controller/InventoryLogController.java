@@ -38,6 +38,12 @@ public class InventoryLogController {
         }
     }
 
+    @GetMapping("/logs/{materialId}")
+    public ResponseEntity<List<InventoryLog>> getInventoryLogsByMaterialId(@PathVariable Long materialId) {
+        List<InventoryLog> inventoryLogs = inventoryLogService.getInventoryLogsByMaterialId(materialId);
+        return ResponseEntity.ok(inventoryLogs);
+    }
+
     @PostMapping
     public ResponseEntity<InventoryLog> createInventoryLog(@RequestBody InventoryLog inventoryLog) {
         InventoryLog createdInventoryLog = inventoryLogService.createInventoryLog(inventoryLog);

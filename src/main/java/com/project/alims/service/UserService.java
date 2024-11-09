@@ -223,7 +223,7 @@ public class UserService {
         if (user != null && bcrypt.matches(password, user.getPassword())) {
             if ("active".equalsIgnoreCase(user.getStatus())) {
                 loggedInUsers.add(user);
-                return "Login successful";
+                return "userId:" + user.getUserId() + ", role:" + user.getDesignation();
             } else if ("deleted".equalsIgnoreCase(user.getStatus())) {
                 return "Login denied: Account has been deleted.";
             } else if ("unverified email".equalsIgnoreCase(user.getStatus())) {

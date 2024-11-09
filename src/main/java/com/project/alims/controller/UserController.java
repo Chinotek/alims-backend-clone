@@ -31,7 +31,7 @@ public class UserController {
     public ResponseEntity<String> login(@RequestParam String identifier, @RequestParam String password) {
         String result = userService.login(identifier, password);
 
-        if ("Login successful".equals(result)) {
+        if (!result.startsWith("Login denied")) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);

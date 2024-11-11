@@ -1,10 +1,13 @@
 package com.project.alims.controller;
 
+import com.project.alims.model.DisposalForm;
 import com.project.alims.model.Supplier;
 import com.project.alims.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -21,6 +24,12 @@ public class SupplierController {
     public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplier) {
         Supplier createdSupplier = supplierService.createSupplier(supplier);
         return ResponseEntity.ok(createdSupplier);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Supplier>> getAllSuppliers() {
+        List<Supplier> forms = supplierService.getAllSuppliers();
+        return ResponseEntity.ok(forms);
     }
 
     @GetMapping("/{id}")

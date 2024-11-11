@@ -26,6 +26,9 @@ public class PurchaseOrder {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @Column(name = "purchase_order_number")
+    private Integer purchaseOrderNumber;
+
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
@@ -66,12 +69,13 @@ public class PurchaseOrder {
 
     public PurchaseOrder() {}
 
-    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDate date, Long labId, Laboratory laboratory, Long userId, User user, Long supplierId, Supplier supplier) {
+    public PurchaseOrder(Long purchaseOrderId, BigDecimal shippingCost, BigDecimal totalPrice, String status, LocalDate date, Integer purchaseOrderNumber, Long labId, Laboratory laboratory, Long userId, User user, Long supplierId, Supplier supplier) {
         this.purchaseOrderId = purchaseOrderId;
         this.shippingCost = shippingCost;
         this.totalPrice = totalPrice;
         this.status = status;
         this.date = date;
+        this.purchaseOrderNumber = purchaseOrderNumber;
         this.labId = labId;
         this.laboratory = laboratory;
         this.userId = userId;
@@ -182,5 +186,13 @@ public class PurchaseOrder {
 
     public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
+    }
+
+    public Integer getPurchaseOrderNumber() {
+        return purchaseOrderNumber;
+    }
+
+    public void setPurchaseOrderNumber(Integer purchaseOrderNumber) {
+        this.purchaseOrderNumber = purchaseOrderNumber;
     }
 }

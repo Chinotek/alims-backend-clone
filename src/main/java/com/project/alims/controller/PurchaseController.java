@@ -21,13 +21,13 @@ public class PurchaseController {
     }
 
     // Create a new purchase order
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<Purchase> createPurchase(@RequestBody Purchase purchase) {
         Purchase createdOrder = purchaseService.createPurchase(purchase);
         return ResponseEntity.ok(createdOrder);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Purchase>> getAllPurchases() {
         List<Purchase> purchases = purchaseService.getAllPurchases();
         return ResponseEntity.ok(purchases);
@@ -45,7 +45,7 @@ public class PurchaseController {
     }
 
     // Update purchase order by ID
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Purchase> updatePurchase(
             @PathVariable Long id,
             @RequestBody Purchase updatedPurchase) {
@@ -58,7 +58,7 @@ public class PurchaseController {
     }
 
     // Delete purchase order by ID
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {
         try {
             purchaseService.deletePurchase(id);

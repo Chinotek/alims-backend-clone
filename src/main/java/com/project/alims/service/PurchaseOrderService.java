@@ -40,6 +40,7 @@ public class PurchaseOrderService {
         existingOrder.setTotalPrice(updatedPurchaseOrder.getTotalPrice());
         existingOrder.setStatus(updatedPurchaseOrder.getStatus());
         existingOrder.setDate(updatedPurchaseOrder.getDate());
+        existingOrder.setPurchaseOrderNumber(updatedPurchaseOrder.getPurchaseOrderNumber());
 
         existingOrder.setLabId(updatedPurchaseOrder.getLabId());
         existingOrder.setUser(updatedPurchaseOrder.getUser());

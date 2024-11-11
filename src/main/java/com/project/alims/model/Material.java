@@ -34,8 +34,6 @@ public class Material {
     @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", insertable = false, updatable = false)
     private Laboratory laboratory;
 
-
-
     @Column(name = "item_code", nullable = false, unique = true)
     private String itemCode;
 
@@ -69,6 +67,12 @@ public class Material {
     @Column(name = "max_threshold", nullable = false)
     private Integer maxThreshold;
 
+    @Column(name = "total_no_containers")
+    private Integer totalNoContainers;
+
+    @Column(name = "lot_no")
+    private Integer lotNo;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -90,7 +94,7 @@ public class Material {
 
     }
 
-    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, Integer totalNoContainers, Integer lotNo) {
         this.materialId = materialId;
         this.labId = labId;
         this.categoryId = categoryId;
@@ -109,8 +113,8 @@ public class Material {
         this.quantityAvailable = quantityAvailable;
         this.reorderThreshold = reorderThreshold;
         this.maxThreshold = maxThreshold;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.totalNoContainers = totalNoContainers;
+        this.lotNo = lotNo;
     }
 
     public Long getMaterialId() {
@@ -255,5 +259,21 @@ public class Material {
 
     public void setMaxThreshold(Integer maxThreshold) {
         this.maxThreshold = maxThreshold;
+    }
+
+    public Integer getTotalNoContainers() {
+        return totalNoContainers;
+    }
+
+    public void setTotalNoContainers(Integer totalNoContainers) {
+        this.totalNoContainers = totalNoContainers;
+    }
+
+    public Integer getLotNo() {
+        return lotNo;
+    }
+
+    public void setLotNo(Integer lotNo) {
+        this.lotNo = lotNo;
     }
 }

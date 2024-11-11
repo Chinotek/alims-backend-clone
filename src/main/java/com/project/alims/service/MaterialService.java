@@ -62,6 +62,8 @@ public class MaterialService {
             material.setQuantityAvailable(updatedMaterial.getQuantityAvailable());
             material.setReorderThreshold(updatedMaterial.getReorderThreshold());
             material.setMaxThreshold(updatedMaterial.getMaxThreshold());
+            material.setTotalNoContainers(updatedMaterial.getTotalNoContainers());
+            material.setLotNo(updatedMaterial.getLotNo());
             return materialRepository.save(material);
         } else {
             throw new RuntimeException("Material not found with ID: " + id);

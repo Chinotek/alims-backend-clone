@@ -1,6 +1,8 @@
 package com.project.alims.model;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -41,6 +43,9 @@ public class DisposalForm {
     @Column(name = "disposed_by", nullable = false)
     private String disposedBy;
 
+    @Column(name = "date_disposed")
+    private LocalDate dateDisposed;
+
     @Column
     private String comments;
 
@@ -53,7 +58,7 @@ public class DisposalForm {
     // Constructors
     public DisposalForm() {}
 
-    public DisposalForm(Long disposalId, Long userId, User user, Long materialId, Material material, String itemDescription, Integer qty, String reasonForDisposal, String disposalMethod, String disposedBy, String comments) {
+    public DisposalForm(Long disposalId, Long userId, User user, Long materialId, Material material, String itemDescription, Integer qty, String reasonForDisposal, String disposalMethod, String disposedBy, LocalDate dateDisposed, String comments) {
         this.disposalId = disposalId;
         this.userId = userId;
         this.user = user;
@@ -64,6 +69,7 @@ public class DisposalForm {
         this.reasonForDisposal = reasonForDisposal;
         this.disposalMethod = disposalMethod;
         this.disposedBy = disposedBy;
+        this.dateDisposed = dateDisposed;
         this.comments = comments;
     }
 
@@ -184,4 +190,11 @@ public class DisposalForm {
         this.materialId = materialId;
     }
 
+    public LocalDate getDateDisposed() {
+        return dateDisposed;
+    }
+
+    public void setDateDisposed(LocalDate dateDisposed) {
+        this.dateDisposed = dateDisposed;
+    }
 }

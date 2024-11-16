@@ -45,6 +45,9 @@ public class User {
     @Column
     private String otp;
 
+    @Column(name = "filtered_suppliers")
+    String filteredSuppliers;
+
     @Column(name = "lab_id")
     private Long labId;
 
@@ -68,7 +71,7 @@ public class User {
 
     }
 
-    public User(Long userId, String username, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, Long labId, Laboratory laboratory) {
+    public User(Long userId, String username, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, String filteredSuppliers, Long labId, Laboratory laboratory) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -79,6 +82,7 @@ public class User {
         this.designation = designation;
         this.status = status;
         this.otp = otp;
+        this.filteredSuppliers = filteredSuppliers;
         this.labId = labId;
         this.laboratory = laboratory;
     }
@@ -187,5 +191,13 @@ public class User {
 
     public void setLaboratory(Laboratory laboratory) {
         this.laboratory = laboratory;
+    }
+
+    public String getFilteredSuppliers() {
+        return filteredSuppliers;
+    }
+
+    public void setFilteredSuppliers(String filteredSuppliers) {
+        this.filteredSuppliers = filteredSuppliers;
     }
 }

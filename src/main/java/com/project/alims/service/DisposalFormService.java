@@ -73,8 +73,6 @@ public class DisposalFormService {
 
         existingDisposalForm.setUserId(updatedDisposalForm.getUserId());
         existingDisposalForm.setMaterialId(updatedDisposalForm.getMaterialId());
-        existingDisposalForm.setUser(updatedDisposalForm.getUser());
-        existingDisposalForm.setMaterial(updatedDisposalForm.getMaterial());
 
         existingDisposalForm.setItemDescription(updatedDisposalForm.getItemDescription());
         existingDisposalForm.setQty(updatedDisposalForm.getQty());
@@ -82,6 +80,7 @@ public class DisposalFormService {
         existingDisposalForm.setDisposalMethod(updatedDisposalForm.getDisposalMethod());
         existingDisposalForm.setDisposedBy(updatedDisposalForm.getDisposedBy());
         existingDisposalForm.setComments(updatedDisposalForm.getComments());
+        existingDisposalForm.setDateDisposed(updatedDisposalForm.getDateDisposed());
         // dateUpdated is handled by @PreUpdate in the entity class
         return disposalFormRepository.save(existingDisposalForm);
     }

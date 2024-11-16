@@ -188,6 +188,9 @@ public class UserService {
             if (userDetails.getLabId() != null) {
                 user.setLabId(userDetails.getLabId());
             }
+            if (userDetails.getFilteredSuppliers() != null) {
+                user.setFilteredSuppliers(userDetails.getFilteredSuppliers());
+            }
 
             return userRepository.save(user);
         } else {

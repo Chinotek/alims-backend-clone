@@ -40,6 +40,12 @@ public class CalibrationLog {
     @Column(length = 500)
     private String attachments;  // store filesystem path
 
+    @Column()
+    private String fileType;
+
+    @Column()
+    private byte[] file;
+
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
@@ -71,6 +77,20 @@ public class CalibrationLog {
         this.nextCalibration = nextCalibration;
         this.notes = notes;
         this.attachments = attachments;
+    }
+
+    public CalibrationLog(Long calibrationId, Long userId, User user, Long materialId, Material material, LocalDate calibrationDate, LocalDate nextCalibration, String notes, String attachments, String fileType, byte[] file) {
+        this.calibrationId = calibrationId;
+        this.userId = userId;
+        this.user = user;
+        this.materialId = materialId;
+        this.material = material;
+        this.calibrationDate = calibrationDate;
+        this.nextCalibration = nextCalibration;
+        this.notes = notes;
+        this.attachments = attachments;
+        this.fileType = fileType;
+        this.file = file;
     }
 
     // Getters and Setters
@@ -161,5 +181,21 @@ public class CalibrationLog {
 
     public void setMaterialId(Long materialId) {
         this.materialId = materialId;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 }

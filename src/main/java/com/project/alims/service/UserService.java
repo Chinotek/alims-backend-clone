@@ -60,7 +60,7 @@ public class UserService {
                     "<p>Hello " + name + ",</p>" +
                     "<p>Thank you for choosing ALIMS. Use the following OTP to verify your email address.</p>" +
                     "<p style='text-align: center; font-size: 40px; font-weight: 600; letter-spacing: 25px; color: #179898;'>" + code + "</p>" +
-                    "<p>OTP is valid for <strong>5 minutes</strong>. Do not share this code with others</p>";
+                    "<p>OTP is valid for <strong>5 minutes</strong>. Do not share this code with others.</p>";
         } else if (emailCode == 2) {
             // Send Temp Password
             containerMessage = "<h1>Hello " + name + "!</h1>" +

@@ -11,7 +11,7 @@ public class Category {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String shortName;
 
     @Column(name = "subcategory_1", nullable = false)

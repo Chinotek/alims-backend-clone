@@ -1,11 +1,12 @@
 package com.project.alims.service;
 
-import com.project.alims.model.Incident;
 import com.project.alims.model.IncidentForm;
 import com.project.alims.repository.IncidentFormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,12 @@ public class IncidentFormService {
         this.incidentFormRepository = incidentFormRepository;
     }
 
-    public IncidentForm saveIncidentForm(IncidentForm incidentForm) {
+    public IncidentForm saveIncidentForm(IncidentForm incidentForm, MultipartFile file) throws IOException {
+        if (file.getSize() > 0) {
+            incidentForm.setFile(file.getBytes());
+            incidentForm.setAttachments(file.getOriginalFilename());
+            incidentForm.setFileType(file.getContentType());
+        }
         return incidentFormRepository.save(incidentForm);
     }
 
@@ -31,7 +37,7 @@ public class IncidentFormService {
         return incidentFormRepository.findById(id);
     }
 
-    public IncidentForm updateIncidentForm(Long id, IncidentForm updatedIncidentForm) {
+    public IncidentForm updateIncidentForm(Long id, IncidentForm updatedIncidentForm, MultipartFile file) throws IOException {
         IncidentForm existingIncidentForm = incidentFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident Form not found with ID: " + id));
 
@@ -42,7 +48,13 @@ public class IncidentFormService {
         existingIncidentForm.setTime(updatedIncidentForm.getTime());
         existingIncidentForm.setMaterialsInvolved(updatedIncidentForm.getMaterialsInvolved());
         existingIncidentForm.setInvolvedIndividuals(updatedIncidentForm.getInvolvedIndividuals());
-        existingIncidentForm.setAttachments(updatedIncidentForm.getAttachments());
+
+        if (file.getSize() > 0) {
+            existingIncidentForm.setFile(file.getBytes());
+            existingIncidentForm.setAttachments(file.getOriginalFilename());
+            existingIncidentForm.setFileType(file.getContentType());
+        }
+
         return incidentFormRepository.save(existingIncidentForm);
     }
 

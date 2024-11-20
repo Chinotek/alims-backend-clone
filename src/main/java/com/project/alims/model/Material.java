@@ -61,10 +61,10 @@ public class Material {
     @Column(name = "quantity_available", nullable = false)
     private Integer quantityAvailable;
 
-    @Column(name = "reorder_threshold", nullable = false)
+    @Column(name = "reorder_threshold")
     private Integer reorderThreshold;
 
-    @Column(name = "max_threshold", nullable = false)
+    @Column(name = "max_threshold")
     private Integer maxThreshold;
 
     @Column(name = "total_no_containers")

@@ -4,7 +4,12 @@ import com.project.alims.model.CalibrationLog;
 import com.project.alims.repository.CalibrationLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +23,12 @@ public class CalibrationLogService {
     }
 
     // Create a new CalibrationLog entry
-    public CalibrationLog createCalibrationLog(CalibrationLog calibrationLog) {
+    public CalibrationLog createCalibrationLog(CalibrationLog calibrationLog, MultipartFile file) throws IOException {
+        if (file.getSize() > 0) {
+            calibrationLog.setFile(file.getBytes());
+            calibrationLog.setAttachments(file.getOriginalFilename());
+            calibrationLog.setFileType(file.getContentType());
+        }
         return calibrationLogRepository.save(calibrationLog);
     }
 
@@ -44,7 +54,7 @@ public class CalibrationLogService {
     }
 
     // Update an existing CalibrationLog
-    public CalibrationLog updateCalibrationLog(Long calibrationId, CalibrationLog updatedCalibrationLog) {
+    public CalibrationLog updateCalibrationLog(Long calibrationId, CalibrationLog updatedCalibrationLog, MultipartFile file) throws IOException {
         CalibrationLog existingCalibrationLog = findCalibrationLogById(calibrationId);
         if (existingCalibrationLog != null) {
             existingCalibrationLog.setUserId(updatedCalibrationLog.getUserId());
@@ -55,7 +65,13 @@ public class CalibrationLogService {
             existingCalibrationLog.setCalibrationDate(updatedCalibrationLog.getCalibrationDate());
             existingCalibrationLog.setNextCalibration(updatedCalibrationLog.getNextCalibration());
             existingCalibrationLog.setNotes(updatedCalibrationLog.getNotes());
-            existingCalibrationLog.setAttachments(updatedCalibrationLog.getAttachments());
+
+            // if no file sent, nothing happens, otherwise replace with new file
+            if (file.getSize() > 0) {
+                existingCalibrationLog.setFile(file.getBytes());
+                existingCalibrationLog.setAttachments(file.getOriginalFilename());
+                existingCalibrationLog.setFileType(file.getContentType());
+            }
             return calibrationLogRepository.save(existingCalibrationLog);
         } else {
             throw new RuntimeException("CalibrationLog not found with ID: " + calibrationId);

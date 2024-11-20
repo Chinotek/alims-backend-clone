@@ -39,6 +39,12 @@ public class IncidentForm {
     @Column(name = "attachments")
     private String attachments;
 
+    @Column()
+    private String fileType;  // store filesystem path
+
+    @Column()
+    private byte[] file;
+
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
@@ -69,6 +75,20 @@ public class IncidentForm {
         this.materialsInvolved = materialsInvolved;
         this.involvedIndividuals = involvedIndividuals;
         this.attachments = attachments;
+    }
+
+    public IncidentForm(Long incidentFormId, Long userId, User user, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String attachments, String fileType, byte[] file) {
+        this.incidentFormId = incidentFormId;
+        this.userId = userId;
+        this.user = user;
+        this.date = date;
+        this.time = time;
+        this.natureOfIncident = natureOfIncident;
+        this.materialsInvolved = materialsInvolved;
+        this.involvedIndividuals = involvedIndividuals;
+        this.attachments = attachments;
+        this.fileType = fileType;
+        this.file = file;
     }
 
     // Getters and Setters
@@ -158,5 +178,21 @@ public class IncidentForm {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 }

@@ -3,9 +3,14 @@ package com.project.alims.controller;
 import com.project.alims.model.CalibrationLog;
 import com.project.alims.service.CalibrationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -21,10 +26,23 @@ public class CalibrationLogController {
     }
 
     // Create a new CalibrationLog
-    @PostMapping("/create")
-    public ResponseEntity<CalibrationLog> createCalibrationLog(@RequestBody CalibrationLog calibrationLog) {
-        CalibrationLog createdLog = calibrationLogService.createCalibrationLog(calibrationLog);
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CalibrationLog> createCalibrationLog(@RequestPart("body") CalibrationLog calibrationLog,
+                                                               @RequestPart("file") MultipartFile file) throws IOException {
+        CalibrationLog createdLog = calibrationLogService.createCalibrationLog(calibrationLog, file);
         return ResponseEntity.ok(createdLog);
+    }
+
+    @GetMapping("/file/{id}")
+    public ResponseEntity<Resource> downloadCalibrationLogFile(@PathVariable Long id) {
+        CalibrationLog calibrationLog = calibrationLogService.findCalibrationLogById(id);
+        byte[] bytes = calibrationLog.getFile();
+        if (bytes == null) throw new RuntimeException("File not found");
+        ByteArrayResource file = new ByteArrayResource(bytes);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
+                        .filename(calibrationLog.getAttachments()).build().toString())
+                .body(file);
     }
 
     // Get all CalibrationLogs
@@ -60,14 +78,12 @@ public class CalibrationLogController {
     }
 
     // Update a CalibrationLog by ID
-    @PutMapping("/update/{id}")
-    public ResponseEntity<CalibrationLog> updateCalibrationLog(@PathVariable Long id, @RequestBody CalibrationLog updatedCalibrationLog) {
-        try {
-            CalibrationLog calibrationLog = calibrationLogService.updateCalibrationLog(id, updatedCalibrationLog);
+    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CalibrationLog> updateCalibrationLog(@PathVariable Long id,
+                                                               @RequestPart("body") CalibrationLog updatedCalibrationLog,
+                                                               @RequestPart("file") MultipartFile file) throws IOException {
+            CalibrationLog calibrationLog = calibrationLogService.updateCalibrationLog(id, updatedCalibrationLog, file);
             return ResponseEntity.ok(calibrationLog);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // Delete a CalibrationLog by ID

@@ -3,7 +3,9 @@ package com.project.alims.service;
 import com.project.alims.model.User;
 import com.project.alims.repository.UserRepository;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
@@ -42,62 +45,89 @@ public class UserService {
 
     // 1 - Send OTP
     // 2 - Send Temp Password
-    public void sendEmail(String to, String name, String subject, String code, int emailCode) throws MessagingException {
+    public void sendEmail(String to, String name, String subject, String code, int emailCode) throws MessagingException, IOException {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         message.setRecipients(MimeMessage.RecipientType.TO, to);
         message.setSubject(subject);
 
-        String containerMessage = "<p> Invalid Email Code sent to method <p>";
+        String containerMessage = "<p>Invalid Email Code sent to method.</p>";
         if (emailCode == 1) {
             // Send OTP
-            containerMessage = "<h1>Hello ALIMS, " + name + "!</h1>" +
-                    "<p>To proceed with your account creation, please enter your One Time Password (OTP) on the verification page.</p>" +
-                    "<p>Your OTP is <span class='code'>" + code + "</span>.</p>";
-
+            containerMessage = "<h1> THANKS FOR SIGNING UP!</h1>" +
+                    "<h2>Verify Your Email Address</h2>" +
+                    "<hr style='border: 1px solid #179898; margin: 20px 0;'>" +
+                    "<p>Hello " + name + ",</p>" +
+                    "<p>Thank you for choosing ALIMS. Use the following OTP to verify your email address.</p>" +
+                    "<p style='text-align: center; font-size: 40px; font-weight: 600; letter-spacing: 25px; color: #179898;'>" + code + "</p>" +
+                    "<p>OTP is valid for <strong>5 minutes</strong>. Do not share this code with others.</p>";
         } else if (emailCode == 2) {
             // Send Temp Password
             containerMessage = "<h1>Hello " + name + "!</h1>" +
-                    "<p>To access your account, please use this temporary password. <span class='code'>" + code + "</span>.</p>" +
-                    "<p>Please log in and replace this temporary password before it expires in 24 hours</p>" +
-                    "<p>In the event that you did not request this, please file a report our website and change your password promptly</p>";
+                    "<p>To access your account, please use this temporary password:</p>" +
+                    "<p style='font-size: 20px; font-weight: bold; color: #179898;'>" + code + "</p>" +
+                    "<p>Please log in and replace this temporary password before it expires in 24 hours.</p>" +
+                    "<p>If you did not request this, please file a report on our website and change your password promptly.</p>";
         }
 
-        // Improved HTML content with medical-themed styles
-        String htmlContent = "<html>" +
+        // Full email HTML template with embedded image
+        String htmlContent = "<!DOCTYPE html>" +
+                "<html lang='en'>" +
                 "<head>" +
+                "<meta charset='UTF-8'>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
                 "<style>" +
-                "body { font-family: Arial, sans-serif; background-color: #f0f8ff; padding: 20px; }" +
-                ".container { background-color: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }" +
-                "h1 { color: #004080; text-align: center; }" +
-                "p { color: #333333; font-size: 16px; line-height: 1.5; }" +
-                ".code { font-weight: bold; font-size: 20px; color: #007bff; padding: 10px; border: 2px solid #007bff; border-radius: 5px; display: inline-block; margin-top: 10px; }" +
-                ".footer { margin-top: 20px; font-size: 14px; color: #777777; text-align: center; }" +
+                "body { font-family: Arial, Helvetica, sans-serif; background: #ffffff; font-size: 14px; }" +
+                ".container { max-width: 680px; margin: 0 auto; padding: 45px 30px 60px; background: #f4f7ff; border-radius: 30px; }" +
+                "h1 { font-size: 25px; font-weight: 800; color: #004D40; text-align: center; }" +
+                "h2 { font-size: 20px; font-weight: 500; color: #116F6F; text-align: center; }" +
+                "p { font-size: 16px; font-weight: 500; color: #434343; line-height: 1.5; }" +
+                ".footer { text-align: center; margin-top: 20px; color: #8c8c8c; font-size: 14px; }" +
+                "img { width: 50px; height: auto; vertical-align: middle; display: inline-block; pointer-events: none; -webkit-user-drag: none; user-select: none; }" +
                 "</style>" +
                 "</head>" +
                 "<body>" +
                 "<div class='container'>" +
+                "<div style='display: flex; align-items: center;'>" + // Flex container for image and title
+                "<img src='cid:logo' alt='Logo'>" +
+                "<h1 style='font-size: 20px; display: inline-block; margin: 0; padding-left: 10px; padding-top: 10px'>Automated Laboratory Inventory Management System</h1>" +
+                "</div>" + "<br>" +
                 containerMessage +
                 "</div>" +
                 "<div class='footer'>" +
-                "<p>Thank you for choosing ALIMS!</p>" +
+                "<p>Need help? Ask at <a href='mailto:alims@gmail.com' style='color: #499fb6; text-decoration: none;'>alims@gmail.com</a></p>" +
+                "<p>&copy; 2024 Automated Laboratory Inventory Management System. All rights reserved.</p>" +
                 "</div>" +
                 "</body>" +
                 "</html>";
 
-        // Set the HTML content to the message
-        message.setContent(htmlContent, "text/html; charset=utf-8");
+        // Create a MimeBodyPart for the HTML content
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
+
+        // Create a MimeBodyPart for the inline image
+        MimeBodyPart imagePart = new MimeBodyPart();
+        imagePart.attachFile("src/main/resources/static/logo.png"); // Path to your image
+        imagePart.setContentID("<logo>");
+        imagePart.setDisposition(MimeBodyPart.INLINE);
+
+        // Combine the parts into a multipart message
+        MimeMultipart multipart = new MimeMultipart();
+        multipart.addBodyPart(htmlPart);
+        multipart.addBodyPart(imagePart);
+
+        // Set the content of the message
+        message.setContent(multipart);
 
         javaMailSender.send(message);
     }
 
-
-    public void sendVerification(String email, String name, String code) throws MessagingException {
+    public void sendVerification(String email, String name, String code) throws MessagingException, IOException {
         String subject = "Account Verification";
         sendEmail(email, name, subject, code, 1);
     }
 
-    public ResponseEntity<String> addUser(User user) {
+    public ResponseEntity<String> addUser(User user) throws IOException {
         User existingUsername = userRepository.findByUsername(user.getUsername());
         User existingEmail = userRepository.findByEmail(user.getEmail());
 
@@ -246,7 +276,7 @@ public class UserService {
         }
     }
 
-    public String forgotPassword(String email) throws MessagingException {
+    public String forgotPassword(String email) throws MessagingException, IOException {
         User user = userRepository.findByEmail(email);
         if (user != null) {
             String subject = "Temporary Password";

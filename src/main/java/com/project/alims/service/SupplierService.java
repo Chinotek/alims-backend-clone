@@ -1,27 +1,57 @@
 package com.project.alims.service;
 
 import com.project.alims.model.Supplier;
+import com.project.alims.model.User;
 import com.project.alims.repository.SupplierRepository;
+import com.project.alims.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SupplierService {
 
     @Autowired
     private final SupplierRepository supplierRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public SupplierService(SupplierRepository supplierRepository) {
+    public SupplierService(SupplierRepository supplierRepository, UserRepository userRepository) {
         this.supplierRepository = supplierRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
+    }
+
+    public List<Supplier> getFilteredSuppliers(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+
+        User user = userOptional.get();
+        String filteredSuppliers = user.getFilteredSuppliers();
+        List<Supplier> allSuppliers = supplierRepository.findAll();
+        if (filteredSuppliers == null || filteredSuppliers.isEmpty()) {
+            return allSuppliers;
+        }
+        Set<Long> filteredSupplierIds = Arrays.stream(filteredSuppliers.split(","))
+                .map(String::trim)
+                .filter(id -> !id.isEmpty())
+                .map(Long::valueOf)
+                .collect(Collectors.toSet());
+
+        return allSuppliers.stream()
+                .filter(supplier -> !filteredSupplierIds.contains(supplier.getSupplierId()))
+                .collect(Collectors.toList());
     }
 
     public Optional<Supplier> getSupplierById(Long id) {

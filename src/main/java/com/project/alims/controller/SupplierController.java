@@ -32,6 +32,12 @@ public class SupplierController {
         return ResponseEntity.ok(forms);
     }
 
+    @GetMapping("/unfiltered/{userId}")
+    public ResponseEntity<List<Supplier>> getUnfilteredSuppliers(@PathVariable Long userId) {
+        List<Supplier> forms = supplierService.getFilteredSuppliers(userId);
+        return ResponseEntity.ok(forms);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Supplier> getSupplierById(@PathVariable Long id) {
         Supplier supplier = supplierService.getSupplierById(id).orElse(null);

@@ -194,6 +194,17 @@ public class UserService {
     public User findByUserId(Long userId) {
         return userRepository.findByUserId(userId);
     }
+
+    public String  getHiddenSuppliers(Long userId) {
+        User user = userRepository.findByUserId(userId);
+        if (user.getFilteredSuppliers() != null) {
+            return user.getFilteredSuppliers();
+        }
+        else{
+            return null;
+        }
+    }
+
     public User updateUser(Long userId, User userDetails) {
         User user = userRepository.findByUserId(userId);
         if (user != null) {

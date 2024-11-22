@@ -49,6 +49,16 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("filtered-suppliers/{userId}")
+    public ResponseEntity<String> getHiddenSupplier(@PathVariable Long userId) {
+        String suppliers = userService.getHiddenSuppliers(userId);
+        if (suppliers != null) {
+            return ResponseEntity.ok(suppliers);
+        } else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         User user = userService.findByUserId(userId);

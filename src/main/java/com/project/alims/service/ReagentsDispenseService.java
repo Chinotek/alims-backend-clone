@@ -65,11 +65,15 @@ public class ReagentsDispenseService {
         Integer deductedAmount = 0; // by default do nothing
         if (updatedReagentDispense.getQtyDispensed() != null && existingReagentDispense.getQtyDispensed() != null) {
             deductedAmount = updatedReagentDispense.getQtyDispensed() - existingReagentDispense.getQtyDispensed();
+        } else if (updatedReagentDispense.getQtyDispensed() != null) {
+            deductedAmount = updatedReagentDispense.getQtyDispensed();
         }
 
         Integer deductedContainers = 0;
         if(updatedReagentDispense.getTotalNoContainers() != null && existingReagentDispense.getTotalNoContainers() != null) {
             deductedContainers = updatedReagentDispense.getTotalNoContainers() - existingReagentDispense.getTotalNoContainers();
+        } else if (updatedReagentDispense.getTotalNoContainers() != null) {
+            deductedContainers = updatedReagentDispense.getTotalNoContainers();
         }
         Long reagentId = updatedReagentDispense.getReagentId();
         Material existingReagent = materialRepository.findById(reagentId)

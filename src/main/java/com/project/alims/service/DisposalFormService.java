@@ -67,6 +67,8 @@ public class DisposalFormService {
         Integer deductedAmount = 0;
         if(updatedDisposalForm.getQty() != null && existingDisposalForm.getQty() != null) {
             deductedAmount = updatedDisposalForm.getQty() - existingDisposalForm.getQty();
+        } else if (updatedDisposalForm.getQty() != null) {
+            deductedAmount = updatedDisposalForm.getQty();
         }
         Long existingMaterialId = updatedDisposalForm.getMaterialId();
         Material existingMaterial = materialRepository.findById(existingMaterialId)

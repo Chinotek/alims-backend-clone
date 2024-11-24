@@ -61,6 +61,8 @@ public class InventoryLogService {
         Integer addedAmount = 0;
         if(updatedInventoryLog.getQuantity() != null && existingLog.getQuantity() != null) {
             addedAmount = updatedInventoryLog.getQuantity() - existingLog.getQuantity();
+        } else if (updatedInventoryLog.getQuantity() != null) {
+            addedAmount = updatedInventoryLog.getQuantity();
         }
         Long existingMaterialId = updatedInventoryLog.getMaterialId();
         Material existingMaterial = materialRepository.findById(existingMaterialId)

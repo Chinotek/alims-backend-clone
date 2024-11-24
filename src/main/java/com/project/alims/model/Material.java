@@ -46,7 +46,7 @@ public class Material {
     @Column(name = "location", nullable = false)
     private String location;
 
-    @Column(name = "expiry_date", nullable = false)
+    @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
     @Column(name = "cost", nullable = false)

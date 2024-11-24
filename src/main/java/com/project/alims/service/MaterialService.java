@@ -48,27 +48,60 @@ public class MaterialService {
     public Material updateMaterial(Long id, Material updatedMaterial) {
         Material material = materialRepository.findByMaterialId(id);
         if (material != null) {
-            material.setItemName(updatedMaterial.getItemName());
-            material.setItemCode(updatedMaterial.getItemCode());
-            material.setCategoryId(updatedMaterial.getCategoryId());
-            material.setSupplierId(updatedMaterial.getSupplierId());
-            material.setLabId(updatedMaterial.getLabId());
-            material.setUnit(updatedMaterial.getUnit());
-            material.setLocation(updatedMaterial.getLocation());
-            material.setExpiryDate(updatedMaterial.getExpiryDate());
-            material.setCost(updatedMaterial.getCost());
-            material.setDescription(updatedMaterial.getDescription());
-            material.setNotes(updatedMaterial.getNotes());
-            material.setQuantityAvailable(updatedMaterial.getQuantityAvailable());
-            material.setReorderThreshold(updatedMaterial.getReorderThreshold());
-            material.setMaxThreshold(updatedMaterial.getMaxThreshold());
-            material.setTotalNoContainers(updatedMaterial.getTotalNoContainers());
-            material.setLotNo(updatedMaterial.getLotNo());
+            if (updatedMaterial.getItemName() != null) {
+                material.setItemName(updatedMaterial.getItemName());
+            }
+            if (updatedMaterial.getItemCode() != null) {
+                material.setItemCode(updatedMaterial.getItemCode());
+            }
+            if (updatedMaterial.getCategoryId() != null) {
+                material.setCategoryId(updatedMaterial.getCategoryId());
+            }
+            if (updatedMaterial.getSupplierId() != null) {
+                material.setSupplierId(updatedMaterial.getSupplierId());
+            }
+            if (updatedMaterial.getLabId() != null) {
+                material.setLabId(updatedMaterial.getLabId());
+            }
+            if (updatedMaterial.getUnit() != null) {
+                material.setUnit(updatedMaterial.getUnit());
+            }
+            if (updatedMaterial.getLocation() != null) {
+                material.setLocation(updatedMaterial.getLocation());
+            }
+            if (updatedMaterial.getExpiryDate() != null) {
+                material.setExpiryDate(updatedMaterial.getExpiryDate());
+            }
+            if (updatedMaterial.getCost() != null) {
+                material.setCost(updatedMaterial.getCost());
+            }
+            if (updatedMaterial.getDescription() != null) {
+                material.setDescription(updatedMaterial.getDescription());
+            }
+            if (updatedMaterial.getNotes() != null) {
+                material.setNotes(updatedMaterial.getNotes());
+            }
+            if (updatedMaterial.getQuantityAvailable() != null) {
+                material.setQuantityAvailable(updatedMaterial.getQuantityAvailable());
+            }
+            if (updatedMaterial.getReorderThreshold() != null) {
+                material.setReorderThreshold(updatedMaterial.getReorderThreshold());
+            }
+            if (updatedMaterial.getMaxThreshold() != null) {
+                material.setMaxThreshold(updatedMaterial.getMaxThreshold());
+            }
+            if (updatedMaterial.getTotalNoContainers() != null) {
+                material.setTotalNoContainers(updatedMaterial.getTotalNoContainers());
+            }
+            if (updatedMaterial.getLotNo() != null) {
+                material.setLotNo(updatedMaterial.getLotNo());
+            }
             return materialRepository.save(material);
         } else {
             throw new RuntimeException("Material not found with ID: " + id);
         }
     }
+
 
     public void deleteMaterial(Long id) {
         materialRepository.deleteById(id);

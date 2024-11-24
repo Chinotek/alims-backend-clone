@@ -70,8 +70,10 @@ public class BorrowFormService {
             Integer previousQty = existingBorrowForm.getQty();
             Integer currentQty = updatedBorrowForm.getQty();
             Integer deductedAmount = 0;
-            if(currentQty != null && previousQty != null) {
+            if(previousQty != null) {
                 deductedAmount = currentQty - previousQty;
+            } else {
+                deductedAmount = currentQty; // if previousQty is null, just use current as deducted
             }
 
             Long existingMaterialId = updatedBorrowForm.getMaterialId();

@@ -57,27 +57,27 @@ public class InventoryLogService {
     public InventoryLog updateInventoryLog(Long id, InventoryLog updatedInventoryLog) {
         InventoryLog existingLog = inventoryLogRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("InventoryLog not found with ID: " + id));
-        Integer addedAmount = updatedInventoryLog.getQuantity() - existingLog.getQuantity();
+
+        Integer addedAmount = 0;
+        if(updatedInventoryLog.getQuantity() != null && existingLog.getQuantity() != null) {
+            addedAmount = updatedInventoryLog.getQuantity() - existingLog.getQuantity();
+        }
         Long existingMaterialId = updatedInventoryLog.getMaterialId();
         Material existingMaterial = materialRepository.findById(existingMaterialId)
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        AddQuantitytoMaterial(existingMaterial, addedAmount);
+        if(addedAmount != 0) AddQuantitytoMaterial(existingMaterial, addedAmount);
 
-        existingLog.setDate(updatedInventoryLog.getDate());
-        existingLog.setSource(updatedInventoryLog.getSource());
-        existingLog.setRemarks(updatedInventoryLog.getRemarks());
+        if(updatedInventoryLog.getDate() != null) existingLog.setDate(updatedInventoryLog.getDate());
+        if(updatedInventoryLog.getDate() != null) existingLog.setSource(updatedInventoryLog.getSource());
+        if(updatedInventoryLog.getDate() != null) existingLog.setRemarks(updatedInventoryLog.getRemarks());
 
-        existingLog.setQuantity(updatedInventoryLog.getQuantity());
+        if(updatedInventoryLog.getDate() != null) existingLog.setQuantity(updatedInventoryLog.getQuantity());
 
-        existingLog.setMaterialId(updatedInventoryLog.getMaterialId());
-        existingLog.setMaterial(updatedInventoryLog.getMaterial());
-
-        existingLog.setUserId(updatedInventoryLog.getUserId());
-        existingLog.setUser(updatedInventoryLog.getUser());
+        if(updatedInventoryLog.getDate() != null) existingLog.setMaterialId(updatedInventoryLog.getMaterialId());
+        if(updatedInventoryLog.getDate() != null) existingLog.setUserId(updatedInventoryLog.getUserId());
 
         return inventoryLogRepository.save(existingLog);
-
     }
 
     public void deleteInventoryLog(Long id) {

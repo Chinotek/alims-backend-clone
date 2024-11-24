@@ -56,23 +56,22 @@ public class IncidentService {
         Incident existingIncident = incidentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident not found with ID: " + id));
 
-        Integer deductedAmount = updatedIncident.getQty() - existingIncident.getQty();
+        Integer deductedAmount = 0;
+        if(updatedIncident.getQty() != null && updatedIncident.getQty() != null) {
+            deductedAmount = updatedIncident.getQty() - existingIncident.getQty();
+        }
         Long existingMaterialId = updatedIncident.getMaterialId();
         Material existingMaterial = materialRepository.findById(existingMaterialId)
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+       if(deductedAmount != 0) DeductQuantitytoMaterial(existingMaterial, deductedAmount);
 
-        existingIncident.setMaterialId(updatedIncident.getMaterialId());
-        existingIncident.setMaterial(updatedIncident.getMaterial());
-        existingIncident.setFormId(updatedIncident.getFormId());
-        existingIncident.setIncidentForm(updatedIncident.getIncidentForm());
+        if(updatedIncident.getMaterialId() != null) existingIncident.setMaterialId(updatedIncident.getMaterialId());
+        if(updatedIncident.getFormId() != null) existingIncident.setFormId(updatedIncident.getFormId());
 
-        existingIncident.setQty(updatedIncident.getQty());
-
-        existingIncident.setQty(updatedIncident.getQty());
-        existingIncident.setBrand(updatedIncident.getBrand());
-        existingIncident.setRemarks(updatedIncident.getRemarks());
+        if(updatedIncident.getQty() != null) existingIncident.setQty(updatedIncident.getQty());
+        if(updatedIncident.getBrand() != null) existingIncident.setBrand(updatedIncident.getBrand());
+        if(updatedIncident.getRemarks() != null) existingIncident.setRemarks(updatedIncident.getRemarks());
         return incidentRepository.save(existingIncident);
     }
 

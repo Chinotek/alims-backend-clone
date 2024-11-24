@@ -66,11 +66,12 @@ public class SupplierService {
         Optional<Supplier> supplierOptional = supplierRepository.findById(id);
         if (supplierOptional.isPresent()) {
             Supplier supplier = supplierOptional.get();
-            supplier.setCompanyName(supplierDetails.getCompanyName());
-            supplier.setContactPerson(supplierDetails.getContactPerson());
-            supplier.setEmail(supplierDetails.getEmail());
-            supplier.setAddress(supplierDetails.getAddress());
-            supplier.setPhoneNumber(supplierDetails.getPhoneNumber());
+
+            if(supplierDetails.getCompanyName() != null) supplier.setCompanyName(supplierDetails.getCompanyName());
+            if(supplierDetails.getContactPerson() != null) supplier.setContactPerson(supplierDetails.getContactPerson());
+            if(supplierDetails.getEmail() != null) supplier.setEmail(supplierDetails.getEmail());
+            if(supplierDetails.getAddress() != null) supplier.setAddress(supplierDetails.getAddress());
+            if(supplierDetails.getPhoneNumber() != null) supplier.setPhoneNumber(supplierDetails.getPhoneNumber());
             return supplierRepository.save(supplier);
         } else {
             throw new RuntimeException("Supplier not found");

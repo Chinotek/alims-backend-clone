@@ -36,19 +36,15 @@ public class PurchaseOrderService {
                 .orElseThrow(() -> new RuntimeException("PurchaseOrder not found with ID: " + PurchaseOrderId));
 
         // Update fields
-        existingOrder.setShippingCost(updatedPurchaseOrder.getShippingCost());
-        existingOrder.setTotalPrice(updatedPurchaseOrder.getTotalPrice());
-        existingOrder.setStatus(updatedPurchaseOrder.getStatus());
-        existingOrder.setDate(updatedPurchaseOrder.getDate());
-        existingOrder.setPurchaseOrderNumber(updatedPurchaseOrder.getPurchaseOrderNumber());
+        if(updatedPurchaseOrder.getShippingCost() != null) existingOrder.setShippingCost(updatedPurchaseOrder.getShippingCost());
+        if(updatedPurchaseOrder.getTotalPrice() != null) existingOrder.setTotalPrice(updatedPurchaseOrder.getTotalPrice());
+        if(updatedPurchaseOrder.getStatus() != null) existingOrder.setStatus(updatedPurchaseOrder.getStatus());
+        if(updatedPurchaseOrder.getDate() != null)existingOrder.setDate(updatedPurchaseOrder.getDate());
+        if(updatedPurchaseOrder.getPurchaseOrderNumber() != null) existingOrder.setPurchaseOrderNumber(updatedPurchaseOrder.getPurchaseOrderNumber());
 
-        existingOrder.setLabId(updatedPurchaseOrder.getLabId());
-        existingOrder.setUser(updatedPurchaseOrder.getUser());
-        existingOrder.setSupplierId(updatedPurchaseOrder.getSupplierId());
-
-        existingOrder.setLaboratory(updatedPurchaseOrder.getLaboratory());
-        existingOrder.setUser(updatedPurchaseOrder.getUser());
-        existingOrder.setSupplier(updatedPurchaseOrder.getSupplier());
+        if(updatedPurchaseOrder.getLabId() != null) existingOrder.setLabId(updatedPurchaseOrder.getLabId());
+        if(updatedPurchaseOrder.getUserId() != null) existingOrder.setUserId(updatedPurchaseOrder.getUserId());
+        if(updatedPurchaseOrder.getSupplierId() != null) existingOrder.setSupplierId(updatedPurchaseOrder.getSupplierId());
 
         // updatedAt will be handled by @PreUpdate
         return purchaseOrderRepository.save(existingOrder);

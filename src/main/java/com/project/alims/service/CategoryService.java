@@ -51,9 +51,9 @@ public class CategoryService {
 
         if (existingCategory.isPresent()) {
             Category category = existingCategory.get();
-            category.setShortName(updatedCategory.getShortName());
-            category.setSubcategory1(updatedCategory.getSubcategory1());
-            category.setSubcategory2(updatedCategory.getSubcategory2());
+            if(updatedCategory.getCategoryId() != null) category.setShortName(updatedCategory.getShortName());
+            if(updatedCategory.getSubcategory1() != null) category.setSubcategory1(updatedCategory.getSubcategory1());
+            if(updatedCategory.getSubcategory2() != null) category.setSubcategory2(updatedCategory.getSubcategory2());
             return categoryRepository.save(category);
         } else {
             throw new RuntimeException("Category not found with ID: " + id);

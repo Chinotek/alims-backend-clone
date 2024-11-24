@@ -25,9 +25,8 @@ public class LaboratoryService {
     public Laboratory updateLaboratory(Long labId, Laboratory updatedLaboratory) {
         Laboratory lab = laboratoryRepository.findByLabId(labId);
         if (lab != null) {
-            lab.setLabName(updatedLaboratory.getLabName());
-            lab.setLocation(updatedLaboratory.getLocation());
-            // updatedAt will be handled by @PreUpdate
+            if(updatedLaboratory.getLabName() != null) lab.setLabName(updatedLaboratory.getLabName());
+            if(updatedLaboratory.getLocation() != null) lab.setLocation(updatedLaboratory.getLocation());
             return laboratoryRepository.save(lab);
         } else {
             throw new RuntimeException("Laboratory not found with ID: " + labId);

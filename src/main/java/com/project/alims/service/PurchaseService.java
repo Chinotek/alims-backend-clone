@@ -37,14 +37,12 @@ public class PurchaseService {
                 .orElseThrow(() -> new RuntimeException("Purchase not found with ID: " + PurchaseId));
 
         // Update fields
-        existingPurchase.setPurchaseOrderId(updatedPurchase.getPurchaseOrderId());
-        existingPurchase.setPurchaseOrder(updatedPurchase.getPurchaseOrder());
-        existingPurchase.setMaterialId(updatedPurchase.getMaterialId());
-        existingPurchase.setMaterial(updatedPurchase.getMaterial());
+        if(updatedPurchase.getPurchaseOrderId() != null) existingPurchase.setPurchaseOrderId(updatedPurchase.getPurchaseOrderId());
+        if(updatedPurchase.getMaterialId() != null) existingPurchase.setMaterialId(updatedPurchase.getMaterialId());
 
-        existingPurchase.setQty(updatedPurchase.getQty());
-        existingPurchase.setDescription(updatedPurchase.getDescription());
-        existingPurchase.setUnitPrice(updatedPurchase.getUnitPrice());
+        if(updatedPurchase.getQty() != null) existingPurchase.setQty(updatedPurchase.getQty());
+        if(updatedPurchase.getDescription() != null) existingPurchase.setDescription(updatedPurchase.getDescription());
+        if(updatedPurchase.getUnitPrice() != null) existingPurchase.setUnitPrice(updatedPurchase.getUnitPrice());
 
         // updatedAt will be handled by @PreUpdate
         return purchaseRepository.save(existingPurchase);

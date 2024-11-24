@@ -71,7 +71,7 @@ public class Material {
     private Integer totalNoContainers;
 
     @Column(name = "lot_no")
-    private Integer lotNo;
+    private String lotNo;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -94,7 +94,7 @@ public class Material {
 
     }
 
-    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, Integer totalNoContainers, Integer lotNo) {
+    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, Integer totalNoContainers, String lotNo) {
         this.materialId = materialId;
         this.labId = labId;
         this.categoryId = categoryId;
@@ -269,11 +269,11 @@ public class Material {
         this.totalNoContainers = totalNoContainers;
     }
 
-    public Integer getLotNo() {
+    public String getLotNo() {
         return lotNo;
     }
 
-    public void setLotNo(Integer lotNo) {
+    public void setLotNo(String lotNo) {
         this.lotNo = lotNo;
     }
 }

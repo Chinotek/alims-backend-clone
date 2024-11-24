@@ -62,29 +62,34 @@ public class ReagentsDispenseService {
         ReagentDispense existingReagentDispense = reagentsDispenseRepository.findById(reagentDispenseId)
                 .orElseThrow(() -> new RuntimeException("ReagentsDispense not found with id " + reagentDispenseId));
 
-        Integer deductedAmount = updatedReagentDispense.getQtyDispensed() - existingReagentDispense.getQtyDispensed();
+        Integer deductedAmount = 0; // by default do nothing
+        if (updatedReagentDispense.getQtyDispensed() != null && existingReagentDispense.getQtyDispensed() != null) {
+            deductedAmount = updatedReagentDispense.getQtyDispensed() - existingReagentDispense.getQtyDispensed();
+        } else if (updatedReagentDispense.getQtyDispensed() != null) {
+            deductedAmount = updatedReagentDispense.getQtyDispensed();
+        }
+
         Integer deductedContainers = 0;
         if(updatedReagentDispense.getTotalNoContainers() != null && existingReagentDispense.getTotalNoContainers() != null) {
             deductedContainers = updatedReagentDispense.getTotalNoContainers() - existingReagentDispense.getTotalNoContainers();
+        } else if (updatedReagentDispense.getTotalNoContainers() != null) {
+            deductedContainers = updatedReagentDispense.getTotalNoContainers();
         }
         Long reagentId = updatedReagentDispense.getReagentId();
         Material existingReagent = materialRepository.findById(reagentId)
                 .orElseThrow(() -> new RuntimeException("Reagent not found with ID: " + reagentId));
-        DeductQuantitytoMaterial(existingReagent, deductedAmount, deductedContainers);
+        if (deductedAmount != 0 && deductedContainers != 0) DeductQuantitytoMaterial(existingReagent, deductedAmount, deductedContainers);
 
-        existingReagentDispense.setName(updatedReagentDispense.getName());
-        existingReagentDispense.setDate(updatedReagentDispense.getDate());
-        existingReagentDispense.setTotalNoContainers(updatedReagentDispense.getTotalNoContainers());
-        existingReagentDispense.setLotNo(updatedReagentDispense.getLotNo());
-        existingReagentDispense.setQtyDispensed(updatedReagentDispense.getQtyDispensed());
-        existingReagentDispense.setRemarks(updatedReagentDispense.getRemarks());
-        existingReagentDispense.setAnalyst(updatedReagentDispense.getAnalyst());
+        if(updatedReagentDispense.getName() != null) existingReagentDispense.setName(updatedReagentDispense.getName());
+        if(updatedReagentDispense.getDate() != null) existingReagentDispense.setDate(updatedReagentDispense.getDate());
+        if(updatedReagentDispense.getTotalNoContainers() != null) existingReagentDispense.setTotalNoContainers(updatedReagentDispense.getTotalNoContainers());
+        if(updatedReagentDispense.getLotNo() != null) existingReagentDispense.setLotNo(updatedReagentDispense.getLotNo());
+        if(updatedReagentDispense.getQtyDispensed() != null) existingReagentDispense.setQtyDispensed(updatedReagentDispense.getQtyDispensed());
+        if(updatedReagentDispense.getRemarks() != null) existingReagentDispense.setRemarks(updatedReagentDispense.getRemarks());
+        if(updatedReagentDispense.getAnalyst() != null) existingReagentDispense.setAnalyst(updatedReagentDispense.getAnalyst());
 
-        existingReagentDispense.setReagentId(updatedReagentDispense.getReagentId());
-        existingReagentDispense.setReagent(updatedReagentDispense.getReagent());
-
-        existingReagentDispense.setUserId(updatedReagentDispense.getUserId());
-        existingReagentDispense.setUser(updatedReagentDispense.getUser());
+        if(updatedReagentDispense.getReagentId() != null) existingReagentDispense.setReagentId(updatedReagentDispense.getReagentId());
+        if(updatedReagentDispense.getUserId() != null) existingReagentDispense.setUserId(updatedReagentDispense.getUserId());
 
         return reagentsDispenseRepository.save(existingReagentDispense);
     }

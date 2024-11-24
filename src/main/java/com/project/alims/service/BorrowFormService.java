@@ -62,48 +62,59 @@ public class BorrowFormService {
         BorrowForm existingBorrowForm = borrowFormRepository.findById(borrowId)
                 .orElseThrow(() -> new RuntimeException("Disposal Form not found with ID: " + borrowId));
 
-        LocalDate previousReturnState = existingBorrowForm.getDateReturned();
-        LocalDate currentReturnState = updatedBorrowForm.getDateReturned();
+        // assume that if updated is null, simply because no new Update to Date Returned
+        if (updatedBorrowForm.getDateReturned() != null && updatedBorrowForm.getQty() != null) {
+            LocalDate previousReturnState = existingBorrowForm.getDateReturned();
+            LocalDate currentReturnState = updatedBorrowForm.getDateReturned();
 
-        Integer previousQty = existingBorrowForm.getQty();
-        Integer currentQty = updatedBorrowForm.getQty();
-        Integer deductedAmount = currentQty - previousQty;
+            Integer previousQty = existingBorrowForm.getQty();
+            Integer currentQty = updatedBorrowForm.getQty();
+            Integer deductedAmount = 0;
+            if(previousQty != null) {
+                deductedAmount = currentQty - previousQty;
+            } else {
+                deductedAmount = currentQty; // if previousQty is null, just use current as deducted
+            }
 
-        Long existingMaterialId = updatedBorrowForm.getMaterialId();
-        Material existingMaterial = materialRepository.findById(existingMaterialId)
-                .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
-        // if no longer borrowed, return deduction based on total quantity
+            Long existingMaterialId = updatedBorrowForm.getMaterialId();
+            Material existingMaterial = materialRepository.findById(existingMaterialId)
+                    .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
+            // if no longer borrowed, return deduction based on total quantity
 
-        if(previousReturnState == null && currentReturnState != null) {
-            DeductQuantitytoMaterial(existingMaterial, -previousQty); // add back
-            // regardless of changes to amount, return previously borrowed
-        } else if (previousReturnState != null && currentReturnState == null) {
-            DeductQuantitytoMaterial(existingMaterial, currentQty);
+            if(previousReturnState == null && currentReturnState != null && previousQty != null) {
+                // if previousQty is null, do nothing - nothing to add back
+                DeductQuantitytoMaterial(existingMaterial, -previousQty); // add back
+                // regardless of changes to amount, return previously borrowed
+                // from not returned to returned
+            } else if (previousReturnState == null){ // && currentReturnState == null
+                // therefore still borrowed, update amount
+                DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+            }
+
+            // previousReturnState != null && currentReturnState == null
+            // DeductQuantitytoMaterial(existingMaterial, currentQty);
             // regardless of changes to amount, take what is currently borrowed
-        } else if (previousReturnState == null){ // && currentReturnState == null
-            // therefore still borrowed, update amount
-            DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+            // but returned to not returned - cannot un-return therefore removed this function
+
+            // if previousReturnState != null && currentReturnState != null
+            // do nothing, already borrowed, no need to update Material Qty
         }
-        // if previousReturnState != null && currentReturnState != null
-        // do nothing, already borrowed, no need to update Material Qty
 
-        existingBorrowForm.setUserId(updatedBorrowForm.getUserId());
-        existingBorrowForm.setMaterialId(updatedBorrowForm.getMaterialId());
-        existingBorrowForm.setUser(updatedBorrowForm.getUser());
-        existingBorrowForm.setMaterial(updatedBorrowForm.getMaterial());
+        if(updatedBorrowForm.getUserId() != null) existingBorrowForm.setUserId(updatedBorrowForm.getUserId());
+        if(updatedBorrowForm.getMaterialId() != null) existingBorrowForm.setMaterialId(updatedBorrowForm.getMaterialId());
 
-        existingBorrowForm.setDateBorrowed(updatedBorrowForm.getDateBorrowed());
-        existingBorrowForm.setDetailsOfBorrowed(updatedBorrowForm.getDetailsOfBorrowed());
-        existingBorrowForm.setEquipment(updatedBorrowForm.getEquipment());
-        existingBorrowForm.setQty(updatedBorrowForm.getQty());
-        existingBorrowForm.setUnit(updatedBorrowForm.getUnit());
-        existingBorrowForm.setBorrowerDetail(updatedBorrowForm.getBorrowerDetail());
-        existingBorrowForm.setDepartment(updatedBorrowForm.getDepartment());
-        existingBorrowForm.setTimeBorrowed(updatedBorrowForm.getTimeBorrowed());
-        existingBorrowForm.setDateReturned(updatedBorrowForm.getDateReturned());
-        existingBorrowForm.setTimeReturned(updatedBorrowForm.getTimeReturned());
-        existingBorrowForm.setRemarks(updatedBorrowForm.getRemarks());
-        existingBorrowForm.setDamageMaterials(updatedBorrowForm.getDamageMaterials());
+        if(updatedBorrowForm.getDateBorrowed() != null) existingBorrowForm.setDateBorrowed(updatedBorrowForm.getDateBorrowed());
+        if(updatedBorrowForm.getDetailsOfBorrowed() != null) existingBorrowForm.setDetailsOfBorrowed(updatedBorrowForm.getDetailsOfBorrowed());
+        if(updatedBorrowForm.getEquipment() != null) existingBorrowForm.setEquipment(updatedBorrowForm.getEquipment());
+        if(updatedBorrowForm.getQty() != null) existingBorrowForm.setQty(updatedBorrowForm.getQty());
+        if(updatedBorrowForm.getUnit() != null) existingBorrowForm.setUnit(updatedBorrowForm.getUnit());
+        if(updatedBorrowForm.getBorrowerDetail() != null) existingBorrowForm.setBorrowerDetail(updatedBorrowForm.getBorrowerDetail());
+        if(updatedBorrowForm.getDepartment() != null) existingBorrowForm.setDepartment(updatedBorrowForm.getDepartment());
+        if(updatedBorrowForm.getTimeBorrowed() != null) existingBorrowForm.setTimeBorrowed(updatedBorrowForm.getTimeBorrowed());
+        if(updatedBorrowForm.getDateReturned() != null) existingBorrowForm.setDateReturned(updatedBorrowForm.getDateReturned());
+        if(updatedBorrowForm.getTimeReturned() != null) existingBorrowForm.setTimeReturned(updatedBorrowForm.getTimeReturned());
+        if(updatedBorrowForm.getRemarks() != null) existingBorrowForm.setRemarks(updatedBorrowForm.getRemarks());
+        if(updatedBorrowForm.getDamageMaterials() != null) existingBorrowForm.setDamageMaterials(updatedBorrowForm.getDamageMaterials());
 
         return borrowFormRepository.save(existingBorrowForm);
     }

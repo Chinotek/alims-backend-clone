@@ -41,13 +41,12 @@ public class IncidentFormService {
         IncidentForm existingIncidentForm = incidentFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident Form not found with ID: " + id));
 
-        existingIncidentForm.setUserId(updatedIncidentForm.getUserId());
-        existingIncidentForm.setUser(updatedIncidentForm.getUser());
+        if(updatedIncidentForm.getUserId() != null) existingIncidentForm.setUserId(updatedIncidentForm.getUserId());
 
-        existingIncidentForm.setDate(updatedIncidentForm.getDate());
-        existingIncidentForm.setTime(updatedIncidentForm.getTime());
-        existingIncidentForm.setMaterialsInvolved(updatedIncidentForm.getMaterialsInvolved());
-        existingIncidentForm.setInvolvedIndividuals(updatedIncidentForm.getInvolvedIndividuals());
+        if(updatedIncidentForm.getDate() != null) existingIncidentForm.setDate(updatedIncidentForm.getDate());
+        if(updatedIncidentForm.getTime() != null) existingIncidentForm.setTime(updatedIncidentForm.getTime());
+        if(updatedIncidentForm.getMaterialsInvolved() != null) existingIncidentForm.setMaterialsInvolved(updatedIncidentForm.getMaterialsInvolved());
+        if(updatedIncidentForm.getInvolvedIndividuals() != null) existingIncidentForm.setInvolvedIndividuals(updatedIncidentForm.getInvolvedIndividuals());
 
         if (file.getSize() > 0) {
             existingIncidentForm.setFile(file.getBytes());

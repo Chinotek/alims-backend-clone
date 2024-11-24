@@ -64,24 +64,28 @@ public class DisposalFormService {
         DisposalForm existingDisposalForm = disposalFormRepository.findById(disposalId)
                 .orElseThrow(() -> new RuntimeException("Disposal Form not found with ID: " + disposalId));
 
-        Integer deductedAmount = updatedDisposalForm.getQty() - existingDisposalForm.getQty();
+        Integer deductedAmount = 0;
+        if(updatedDisposalForm.getQty() != null && existingDisposalForm.getQty() != null) {
+            deductedAmount = updatedDisposalForm.getQty() - existingDisposalForm.getQty();
+        } else if (updatedDisposalForm.getQty() != null) {
+            deductedAmount = updatedDisposalForm.getQty();
+        }
         Long existingMaterialId = updatedDisposalForm.getMaterialId();
         Material existingMaterial = materialRepository.findById(existingMaterialId)
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+        if(deductedAmount != 0) DeductQuantitytoMaterial(existingMaterial, deductedAmount);
 
-        existingDisposalForm.setUserId(updatedDisposalForm.getUserId());
-        existingDisposalForm.setMaterialId(updatedDisposalForm.getMaterialId());
+        if(updatedDisposalForm.getUserId() != null) existingDisposalForm.setUserId(updatedDisposalForm.getUserId());
+        if(updatedDisposalForm.getMaterialId() != null) existingDisposalForm.setMaterialId(updatedDisposalForm.getMaterialId());
 
-        existingDisposalForm.setItemDescription(updatedDisposalForm.getItemDescription());
-        existingDisposalForm.setQty(updatedDisposalForm.getQty());
-        existingDisposalForm.setReasonForDisposal(updatedDisposalForm.getReasonForDisposal());
-        existingDisposalForm.setDisposalMethod(updatedDisposalForm.getDisposalMethod());
-        existingDisposalForm.setDisposedBy(updatedDisposalForm.getDisposedBy());
-        existingDisposalForm.setComments(updatedDisposalForm.getComments());
-        existingDisposalForm.setDateDisposed(updatedDisposalForm.getDateDisposed());
-        // dateUpdated is handled by @PreUpdate in the entity class
+        if(updatedDisposalForm.getItemDescription() != null) existingDisposalForm.setItemDescription(updatedDisposalForm.getItemDescription());
+        if(updatedDisposalForm.getQty() != null) existingDisposalForm.setQty(updatedDisposalForm.getQty());
+        if(updatedDisposalForm.getReasonForDisposal() != null) existingDisposalForm.setReasonForDisposal(updatedDisposalForm.getReasonForDisposal());
+        if(updatedDisposalForm.getDisposalMethod() != null) existingDisposalForm.setDisposalMethod(updatedDisposalForm.getDisposalMethod());
+        if(updatedDisposalForm.getDisposedBy() != null) existingDisposalForm.setDisposedBy(updatedDisposalForm.getDisposedBy());
+        if(updatedDisposalForm.getComments() != null) existingDisposalForm.setComments(updatedDisposalForm.getComments());
+        if(updatedDisposalForm.getDateDisposed() != null) existingDisposalForm.setDateDisposed(updatedDisposalForm.getDateDisposed());
         return disposalFormRepository.save(existingDisposalForm);
     }
 

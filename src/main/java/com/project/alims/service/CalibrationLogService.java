@@ -57,14 +57,12 @@ public class CalibrationLogService {
     public CalibrationLog updateCalibrationLog(Long calibrationId, CalibrationLog updatedCalibrationLog, MultipartFile file) throws IOException {
         CalibrationLog existingCalibrationLog = findCalibrationLogById(calibrationId);
         if (existingCalibrationLog != null) {
-            existingCalibrationLog.setUserId(updatedCalibrationLog.getUserId());
-            existingCalibrationLog.setMaterialId(updatedCalibrationLog.getMaterialId());
-            existingCalibrationLog.setUser(updatedCalibrationLog.getUser());
-            existingCalibrationLog.setMaterial(updatedCalibrationLog.getMaterial());
+            if(updatedCalibrationLog.getUserId() != null) existingCalibrationLog.setUserId(updatedCalibrationLog.getUserId());
+            if(updatedCalibrationLog.getMaterialId() != null) existingCalibrationLog.setMaterialId(updatedCalibrationLog.getMaterialId());
 
-            existingCalibrationLog.setCalibrationDate(updatedCalibrationLog.getCalibrationDate());
-            existingCalibrationLog.setNextCalibration(updatedCalibrationLog.getNextCalibration());
-            existingCalibrationLog.setNotes(updatedCalibrationLog.getNotes());
+            if(updatedCalibrationLog.getCalibrationDate() != null) existingCalibrationLog.setCalibrationDate(updatedCalibrationLog.getCalibrationDate());
+            if(updatedCalibrationLog.getNextCalibration() != null) existingCalibrationLog.setNextCalibration(updatedCalibrationLog.getNextCalibration());
+            if(updatedCalibrationLog.getNotes() != null) existingCalibrationLog.setNotes(updatedCalibrationLog.getNotes());
 
             // if no file sent, nothing happens, otherwise replace with new file
             if (file.getSize() > 0) {

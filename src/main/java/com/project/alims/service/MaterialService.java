@@ -96,6 +96,9 @@ public class MaterialService {
             if (updatedMaterial.getLotNo() != null) {
                 material.setLotNo(updatedMaterial.getLotNo());
             }
+            if (updatedMaterial.getQtyPerContainer() != null) {
+                material.setQtyPerContainer(updatedMaterial.getQtyPerContainer());
+            }
             return materialRepository.save(material);
         } else {
             throw new RuntimeException("Material not found with ID: " + id);

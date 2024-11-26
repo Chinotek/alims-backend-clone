@@ -2,6 +2,7 @@ package com.project.alims.service;
 
 import com.project.alims.model.BorrowForm;
 import com.project.alims.model.DisposalForm;
+import com.project.alims.model.InventoryLog;
 import com.project.alims.model.Material;
 import com.project.alims.repository.BorrowFormRepository;
 import com.project.alims.repository.MaterialRepository;
@@ -18,12 +19,14 @@ public class BorrowFormService {
 
     private final BorrowFormRepository borrowFormRepository;
     private final MaterialRepository materialRepository;
+    private final InventoryLogService inventoryLogService;
 
 
     @Autowired
-    public BorrowFormService(BorrowFormRepository borrowFormRepository, MaterialRepository materialRepository) {
+    public BorrowFormService(BorrowFormRepository borrowFormRepository, MaterialRepository materialRepository, InventoryLogService inventoryLogService) {
         this.borrowFormRepository = borrowFormRepository;
         this.materialRepository = materialRepository;
+        this.inventoryLogService = inventoryLogService;
     }
 
 
@@ -35,12 +38,28 @@ public class BorrowFormService {
         return borrowFormRepository.findById(id);
     }
 
-    public Material DeductQuantitytoMaterial(Material existingBorrowFormMaterial, Integer deductedAmount) {
+    public InventoryLog DeductQuantitytoMaterial(Material existingBorrowFormMaterial, BorrowForm borrowForm, Integer deductedAmount) {
+
         if (existingBorrowFormMaterial != null) {
-            Integer quantityAvailable = existingBorrowFormMaterial.getQuantityAvailable();
-            quantityAvailable -= deductedAmount;
-            existingBorrowFormMaterial.setQuantityAvailable(quantityAvailable);
-            return materialRepository.save(existingBorrowFormMaterial);
+            String remark;
+            // If return (negative deduction = add back)
+            if (deductedAmount < 0) {
+                remark = "Returned " + -deductedAmount + " " + existingBorrowFormMaterial.getUnit() + " of " +
+                        existingBorrowFormMaterial.getItemName() + " on " + LocalDate.now();
+            } else {
+                remark = "Borrowed " + deductedAmount + " " + existingBorrowFormMaterial.getUnit() + " of " +
+                        existingBorrowFormMaterial.getItemName() + " on " + borrowForm.getDateBorrowed();
+            }
+
+            InventoryLog inventoryLog = new InventoryLog(
+                    borrowForm.getUserId(),
+                    existingBorrowFormMaterial.getMaterialId(),
+                    LocalDate.now(),
+                    -deductedAmount,
+                    "Borrow: " + borrowForm.getBorrowId(),
+                    remark
+            );
+            return inventoryLogService.createInventoryLog(inventoryLog);
         } else {
             throw new RuntimeException("Material not found");
         }
@@ -48,12 +67,17 @@ public class BorrowFormService {
 
     public BorrowForm createBorrowForm(BorrowForm borrowForm) {
         LocalDate dateReturned = borrowForm.getDateReturned();
-        if (dateReturned == null) {
+
+        // if returned, no need to do anything, nothing was reduced in the first place
+        if ("Borrowed".equalsIgnoreCase(borrowForm.getStatus())) {
             Integer deductedAmount = borrowForm.getQty();
             Long existingMaterialId = borrowForm.getMaterialId();
             Material existingMaterial = materialRepository.findById(existingMaterialId)
                     .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
-            DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+
+            BorrowForm createdBorrowForm = borrowFormRepository.save(borrowForm);
+            DeductQuantitytoMaterial(existingMaterial, createdBorrowForm, deductedAmount);
+            return createdBorrowForm;
         }
         return borrowFormRepository.save(borrowForm);
     }
@@ -62,43 +86,11 @@ public class BorrowFormService {
         BorrowForm existingBorrowForm = borrowFormRepository.findById(borrowId)
                 .orElseThrow(() -> new RuntimeException("Disposal Form not found with ID: " + borrowId));
 
-        // assume that if updated is null, simply because no new Update to Date Returned
-        if (updatedBorrowForm.getDateReturned() != null && updatedBorrowForm.getQty() != null) {
-            LocalDate previousReturnState = existingBorrowForm.getDateReturned();
-            LocalDate currentReturnState = updatedBorrowForm.getDateReturned();
+        String previousStatus = existingBorrowForm.getStatus();
+        String currentStatus = updatedBorrowForm.getStatus();
 
-            Integer previousQty = existingBorrowForm.getQty();
-            Integer currentQty = updatedBorrowForm.getQty();
-            Integer deductedAmount = 0;
-            if(previousQty != null) {
-                deductedAmount = currentQty - previousQty;
-            } else {
-                deductedAmount = currentQty; // if previousQty is null, just use current as deducted
-            }
-
-            Long existingMaterialId = updatedBorrowForm.getMaterialId();
-            Material existingMaterial = materialRepository.findById(existingMaterialId)
-                    .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
-            // if no longer borrowed, return deduction based on total quantity
-
-            if(previousReturnState == null && currentReturnState != null && previousQty != null) {
-                // if previousQty is null, do nothing - nothing to add back
-                DeductQuantitytoMaterial(existingMaterial, -previousQty); // add back
-                // regardless of changes to amount, return previously borrowed
-                // from not returned to returned
-            } else if (previousReturnState == null){ // && currentReturnState == null
-                // therefore still borrowed, update amount
-                DeductQuantitytoMaterial(existingMaterial, deductedAmount);
-            }
-
-            // previousReturnState != null && currentReturnState == null
-            // DeductQuantitytoMaterial(existingMaterial, currentQty);
-            // regardless of changes to amount, take what is currently borrowed
-            // but returned to not returned - cannot un-return therefore removed this function
-
-            // if previousReturnState != null && currentReturnState != null
-            // do nothing, already borrowed, no need to update Material Qty
-        }
+        Integer previousQty = existingBorrowForm.getQty();
+        Integer currentQty = updatedBorrowForm.getQty();
 
         if(updatedBorrowForm.getUserId() != null) existingBorrowForm.setUserId(updatedBorrowForm.getUserId());
         if(updatedBorrowForm.getMaterialId() != null) existingBorrowForm.setMaterialId(updatedBorrowForm.getMaterialId());
@@ -115,7 +107,50 @@ public class BorrowFormService {
         if(updatedBorrowForm.getTimeReturned() != null) existingBorrowForm.setTimeReturned(updatedBorrowForm.getTimeReturned());
         if(updatedBorrowForm.getRemarks() != null) existingBorrowForm.setRemarks(updatedBorrowForm.getRemarks());
         if(updatedBorrowForm.getDamageMaterials() != null) existingBorrowForm.setDamageMaterials(updatedBorrowForm.getDamageMaterials());
+        if(updatedBorrowForm.getStatus() != null) existingBorrowForm.setStatus(updatedBorrowForm.getStatus());
 
+        // if status is null, status was not updated, nothing to do
+        if (updatedBorrowForm.getStatus() != null || updatedBorrowForm.getQty() != null) {
+            Integer deductedAmount = 0;
+            // if previous qty is null, we are reducing nothing
+            if(previousQty != null && currentQty != null) {
+                deductedAmount = currentQty - previousQty; // none are null, then get both
+            } else if (previousQty != null) {
+                currentQty = previousQty; // they should be the same
+                // if not updated, don't deduct more - let deducted amount = 0
+            }
+            // both null, then what are even doing
+
+
+            Long existingMaterialId = existingBorrowForm.getMaterialId();
+            if (updatedBorrowForm.getMaterialId() != null) existingMaterialId = updatedBorrowForm.getMaterialId();
+            Material existingMaterial = materialRepository.findById(existingMaterialId)
+                    .orElseThrow(() -> new RuntimeException("Material not found with ID"));
+            // if no longer borrowed, return deduction based on total quantity
+
+            BorrowForm borrowForm = borrowFormRepository.save(existingBorrowForm);
+
+            if("Borrowed".equalsIgnoreCase(previousStatus) && "Returned".equalsIgnoreCase(currentStatus)
+                    && previousQty != null && previousQty != 0) {
+                // if previousQty is null, do nothing - nothing to add back
+                DeductQuantitytoMaterial(existingMaterial, borrowForm, -previousQty); // add back
+                // regardless of changes to amount, return previously borrowed
+                // from borrowed to returned
+            } else if ("Returned".equalsIgnoreCase(previousStatus) && "Borrowed".equalsIgnoreCase(currentStatus)
+                    && currentQty != null && currentQty != 0) {
+                // current status returned -> borrowed : reduce by currentQty
+                DeductQuantitytoMaterial(existingMaterial, borrowForm, currentQty);
+            } else if ("Borrowed".equalsIgnoreCase(previousStatus)
+                    && deductedAmount != 0) {
+                // current status borrowed -> borrowed
+                // can work even if status is not updated
+                // therefore still borrowed/returned, update amount
+                DeductQuantitytoMaterial(existingMaterial, borrowForm, deductedAmount);
+            }
+            // current status returned -> returned : do nothing (what are we even returning)
+
+            return borrowForm;
+        }
         return borrowFormRepository.save(existingBorrowForm);
     }
 

@@ -1,12 +1,16 @@
 package com.project.alims.service;
 
 import com.project.alims.model.Incident;
+import com.project.alims.model.IncidentForm;
+import com.project.alims.model.InventoryLog;
 import com.project.alims.model.Material;
+import com.project.alims.repository.IncidentFormRepository;
 import com.project.alims.repository.IncidentRepository;
 import com.project.alims.repository.MaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,12 +18,16 @@ import java.util.Optional;
 public class IncidentService {
 
     private final IncidentRepository incidentRepository;
+    private final IncidentFormRepository incidentFormRepository;
     private final MaterialRepository materialRepository;
+    private final InventoryLogService inventoryLogService;
 
     @Autowired
-    public IncidentService(IncidentRepository incidentRepository, MaterialRepository materialRepository) {
+    public IncidentService(IncidentRepository incidentRepository, IncidentFormRepository incidentFormRepository, MaterialRepository materialRepository, InventoryLogService inventoryLogService) {
         this.incidentRepository = incidentRepository;
+        this.incidentFormRepository = incidentFormRepository;
         this.materialRepository = materialRepository;
+        this.inventoryLogService = inventoryLogService;
     }
 
 
@@ -31,12 +39,18 @@ public class IncidentService {
         return incidentRepository.findById(id).orElse(null);
     }
 
-    public Material DeductQuantitytoMaterial(Material existingIncidentMaterial, Integer deductedAmount) {
+    public InventoryLog DeductQuantitytoMaterial(Material existingIncidentMaterial, Incident incident, IncidentForm incidentForm, Integer deductedAmount) {
         if (existingIncidentMaterial != null) {
-            Integer quantityAvailable = existingIncidentMaterial.getQuantityAvailable();
-            quantityAvailable -= deductedAmount;
-            existingIncidentMaterial.setQuantityAvailable(quantityAvailable);
-            return materialRepository.save(existingIncidentMaterial);
+            InventoryLog inventoryLog = new InventoryLog(
+                    incidentForm.getUserId(),
+                    existingIncidentMaterial.getMaterialId(),
+                    LocalDate.now(),
+                    -deductedAmount,
+                    "IncidentForm: " + incidentForm.getIncidentFormId() + " Incident: "  + incident.getIncidentId(),
+                    "Incident: " + deductedAmount + " " + existingIncidentMaterial.getUnit() + " of " +
+                            existingIncidentMaterial.getItemName() + " on " + incidentForm.getDate()
+            );
+            return inventoryLogService.createInventoryLog(inventoryLog);
         } else {
             throw new RuntimeException("Material not found");
         }
@@ -47,9 +61,13 @@ public class IncidentService {
         Long existingMaterialId = incident.getMaterialId();
         Material existingMaterial = materialRepository.findById(existingMaterialId)
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
+        Long existingIncidentFormId = incident.getFormId();
+        IncidentForm existingIncidentForm = incidentFormRepository.findById(existingIncidentFormId)
+                .orElseThrow(() -> new RuntimeException("Incident Form not found with ID: " + existingIncidentFormId));
 
-        DeductQuantitytoMaterial(existingMaterial, deductedAmount);
-        return incidentRepository.save(incident);
+        Incident createdIncident = incidentRepository.save(incident);
+        DeductQuantitytoMaterial(existingMaterial, incident, existingIncidentForm, deductedAmount);
+        return createdIncident;
     }
 
     public Incident updateIncident(Long id, Incident updatedIncident) {
@@ -62,11 +80,18 @@ public class IncidentService {
         } else if (updatedIncident.getQty() != null) {
             deductedAmount = updatedIncident.getQty();
         }
-        Long existingMaterialId = updatedIncident.getMaterialId();
-        Material existingMaterial = materialRepository.findById(existingMaterialId)
-                .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
+        // qty not updated - updated qty not null - deducted amount = 0
 
-       if(deductedAmount != 0) DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+        Long existingMaterialId = existingIncident.getMaterialId();
+        if(updatedIncident.getMaterialId() != null) existingMaterialId = updatedIncident.getMaterialId();
+        Material existingMaterial = materialRepository.findById(existingMaterialId)
+                .orElseThrow(() -> new RuntimeException("Material not found"));
+        Long existingIncidentFormId = existingIncident.getFormId();
+        if(updatedIncident.getFormId() != null) existingIncidentFormId = updatedIncident.getFormId();
+        IncidentForm existingIncidentForm = incidentFormRepository.findById(existingIncidentFormId)
+                .orElseThrow(() -> new RuntimeException("Incident Form not found"));
+
+       if(deductedAmount != 0) DeductQuantitytoMaterial(existingMaterial, existingIncident, existingIncidentForm, deductedAmount);
 
         if(updatedIncident.getMaterialId() != null) existingIncident.setMaterialId(updatedIncident.getMaterialId());
         if(updatedIncident.getFormId() != null) existingIncident.setFormId(updatedIncident.getFormId());

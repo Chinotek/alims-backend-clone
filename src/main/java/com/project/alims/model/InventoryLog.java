@@ -41,6 +41,15 @@ public class InventoryLog {
 
     public InventoryLog() {}
 
+    public InventoryLog(Long userId, Long materialId, LocalDate date, Integer quantity, String source, String remarks) {
+        this.userId = userId;
+        this.materialId = materialId;
+        this.date = date;
+        this.quantity = quantity;
+        this.source = source;
+        this.remarks = remarks;
+    }
+
     public InventoryLog(Long inventoryLogId, Long userId, User user, Long materialId, Material material, LocalDate date, Integer quantity, String source, String remarks) {
         this.inventoryLogId = inventoryLogId;
         this.userId = userId;

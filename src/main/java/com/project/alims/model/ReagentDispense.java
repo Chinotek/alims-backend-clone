@@ -33,7 +33,7 @@ public class ReagentDispense {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "total_no_containers", nullable = false)
+    @Column(name = "total_no_containers")
     private Integer totalNoContainers;
 
     @Column(name = "lot_no", nullable = false)

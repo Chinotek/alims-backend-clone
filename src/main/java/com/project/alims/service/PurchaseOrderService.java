@@ -41,6 +41,8 @@ public class PurchaseOrderService {
         if(updatedPurchaseOrder.getStatus() != null) existingOrder.setStatus(updatedPurchaseOrder.getStatus());
         if(updatedPurchaseOrder.getDate() != null)existingOrder.setDate(updatedPurchaseOrder.getDate());
         if(updatedPurchaseOrder.getPurchaseOrderNumber() != null) existingOrder.setPurchaseOrderNumber(updatedPurchaseOrder.getPurchaseOrderNumber());
+        if(updatedPurchaseOrder.getTax() != null) existingOrder.setTax(updatedPurchaseOrder.getTax());
+
 
         if(updatedPurchaseOrder.getLabId() != null) existingOrder.setLabId(updatedPurchaseOrder.getLabId());
         if(updatedPurchaseOrder.getUserId() != null) existingOrder.setUserId(updatedPurchaseOrder.getUserId());

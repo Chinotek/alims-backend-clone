@@ -2,10 +2,13 @@ package com.project.alims.controller;
 
 
 import com.project.alims.model.Laboratory;
+import com.project.alims.model.Supplier;
 import com.project.alims.service.LaboratoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,6 +35,12 @@ public class LaboratoryController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Laboratory>> getAllLaboratories() {
+        List<Laboratory> labs = laboratoryService.getAllLaboratories();
+        return ResponseEntity.ok(labs);
     }
 
     @PutMapping("/update/{id}")

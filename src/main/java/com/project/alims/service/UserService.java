@@ -220,6 +220,9 @@ public class UserService {
             if (userDetails.getLastName() != null) {
                 user.setLastName(userDetails.getLastName());
             }
+            if (userDetails.getPhoneNumber() != null) {
+                user.setPhoneNumber(userDetails.getPhoneNumber());
+            }
             if (userDetails.getDesignation() != null) {
                 user.setDesignation(userDetails.getDesignation());
             }

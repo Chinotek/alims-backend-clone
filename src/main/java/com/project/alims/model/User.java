@@ -30,6 +30,9 @@ public class User {
     @Column(nullable = false, name = "last_name")
     private String lastName;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(nullable = false)
     private String designation;
 
@@ -71,7 +74,7 @@ public class User {
 
     }
 
-    public User(Long userId, String username, String email, String password, String firstName, String middleName, String lastName, String designation, String status, String otp, String filteredSuppliers, Long labId, Laboratory laboratory) {
+    public User(Long userId, String username, String email, String password, String firstName, String middleName, String lastName, String phoneNumber, String designation, String status, String otp, String filteredSuppliers, Long labId, Laboratory laboratory) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -79,6 +82,7 @@ public class User {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.designation = designation;
         this.status = status;
         this.otp = otp;
@@ -143,6 +147,14 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getDesignation() {
         return designation;
     }
@@ -167,7 +179,6 @@ public class User {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-
 
     public String getOtp() {
         return otp;

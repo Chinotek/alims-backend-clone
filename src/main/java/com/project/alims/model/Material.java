@@ -73,6 +73,9 @@ public class Material {
     @Column(name = "lot_no")
     private String lotNo;
 
+    @Column(name = "qty_per_container")
+    private Integer qtyPerContainer;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -94,7 +97,7 @@ public class Material {
 
     }
 
-    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, Integer totalNoContainers, String lotNo) {
+    public Material(Long materialId, Long labId, Long categoryId, Long supplierId, Category category, Supplier supplier, Laboratory laboratory, String itemCode, String itemName, String unit, String location, LocalDateTime expiryDate, BigDecimal cost, String description, String notes, Integer quantityAvailable, Integer reorderThreshold, Integer maxThreshold, Integer totalNoContainers, String lotNo, Integer qtyPerContainer) {
         this.materialId = materialId;
         this.labId = labId;
         this.categoryId = categoryId;
@@ -115,6 +118,7 @@ public class Material {
         this.maxThreshold = maxThreshold;
         this.totalNoContainers = totalNoContainers;
         this.lotNo = lotNo;
+        this.qtyPerContainer = qtyPerContainer;
     }
 
     public Long getMaterialId() {
@@ -275,5 +279,13 @@ public class Material {
 
     public void setLotNo(String lotNo) {
         this.lotNo = lotNo;
+    }
+
+    public Integer getQtyPerContainer() {
+        return qtyPerContainer;
+    }
+
+    public void setQtyPerContainer(Integer qtyPerContainer) {
+        this.qtyPerContainer = qtyPerContainer;
     }
 }

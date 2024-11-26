@@ -3,11 +3,15 @@ package com.project.alims.service;
 import com.project.alims.model.DisposalForm;
 import com.project.alims.model.InventoryLog;
 import com.project.alims.model.Material;
+import com.project.alims.model.User;
 import com.project.alims.repository.DisposalFormRepository;
+import com.project.alims.repository.InventoryLogRepository;
 import com.project.alims.repository.MaterialRepository;
+import com.project.alims.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +19,13 @@ import java.util.Optional;
 public class DisposalFormService {
     private final DisposalFormRepository disposalFormRepository;
     private final MaterialRepository materialRepository;
+    private final InventoryLogService inventoryLogService;
 
     @Autowired
-    public DisposalFormService(DisposalFormRepository disposalFormRepository, MaterialRepository materialRepository) {
+    public DisposalFormService(DisposalFormRepository disposalFormRepository, MaterialRepository materialRepository, InventoryLogService inventoryLogService) {
         this.disposalFormRepository = disposalFormRepository;
         this.materialRepository = materialRepository;
+        this.inventoryLogService = inventoryLogService;
     }
 
     public List<DisposalForm> findAllDisposalForms() {
@@ -39,12 +45,18 @@ public class DisposalFormService {
         return disposalFormRepository.findByMaterialId(itemCode);
     }
 
-    public Material DeductQuantitytoMaterial(Material existingDisposalFormMaterial, Integer deductedAmount) {
+    public InventoryLog DeductQuantitytoMaterial(Material existingDisposalFormMaterial, DisposalForm disposalForm, Integer deductedAmount) {
         if (existingDisposalFormMaterial != null) {
-            Integer quantityAvailable = existingDisposalFormMaterial.getQuantityAvailable();
-            quantityAvailable -= deductedAmount;
-            existingDisposalFormMaterial.setQuantityAvailable(quantityAvailable);
-            return materialRepository.save(existingDisposalFormMaterial);
+            InventoryLog inventoryLog = new InventoryLog(
+                    disposalForm.getUserId(),
+                    existingDisposalFormMaterial.getMaterialId(),
+                    LocalDate.now(),
+                    -deductedAmount,
+                    "Disposal: " + disposalForm.getDisposalId(),
+                    "Disposed " + deductedAmount + " " + existingDisposalFormMaterial.getUnit() + " of " +
+                            existingDisposalFormMaterial.getItemName() + " on " + disposalForm.getDateDisposed()
+            );
+            return inventoryLogService.createInventoryLog(inventoryLog);
         } else {
             throw new RuntimeException("Material not found");
         }
@@ -56,8 +68,9 @@ public class DisposalFormService {
         Material existingMaterial = materialRepository.findById(existingMaterialId)
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        DeductQuantitytoMaterial(existingMaterial, deductedAmount);
-        return disposalFormRepository.save(disposalForm);
+        DisposalForm createdDisposalForm = disposalFormRepository.save(disposalForm);
+        DeductQuantitytoMaterial(existingMaterial, createdDisposalForm, deductedAmount);
+        return createdDisposalForm;
     }
 
     public DisposalForm updateDisposalForm(Long disposalId, DisposalForm updatedDisposalForm) {
@@ -70,11 +83,11 @@ public class DisposalFormService {
         } else if (updatedDisposalForm.getQty() != null) {
             deductedAmount = updatedDisposalForm.getQty();
         }
-        Long existingMaterialId = updatedDisposalForm.getMaterialId();
-        Material existingMaterial = materialRepository.findById(existingMaterialId)
-                .orElseThrow(() -> new RuntimeException("Material not found with ID: " + existingMaterialId));
 
-        if(deductedAmount != 0) DeductQuantitytoMaterial(existingMaterial, deductedAmount);
+        Long existingMaterialId = existingDisposalForm.getMaterialId();
+        if (updatedDisposalForm.getMaterialId() != null) existingMaterialId = updatedDisposalForm.getMaterialId();
+        Material existingMaterial = materialRepository.findById(existingMaterialId)
+                .orElseThrow(() -> new RuntimeException("Material not found with ID"));
 
         if(updatedDisposalForm.getUserId() != null) existingDisposalForm.setUserId(updatedDisposalForm.getUserId());
         if(updatedDisposalForm.getMaterialId() != null) existingDisposalForm.setMaterialId(updatedDisposalForm.getMaterialId());
@@ -86,7 +99,10 @@ public class DisposalFormService {
         if(updatedDisposalForm.getDisposedBy() != null) existingDisposalForm.setDisposedBy(updatedDisposalForm.getDisposedBy());
         if(updatedDisposalForm.getComments() != null) existingDisposalForm.setComments(updatedDisposalForm.getComments());
         if(updatedDisposalForm.getDateDisposed() != null) existingDisposalForm.setDateDisposed(updatedDisposalForm.getDateDisposed());
-        return disposalFormRepository.save(existingDisposalForm);
+
+        DisposalForm disposalForm = disposalFormRepository.save(existingDisposalForm);
+        if(deductedAmount != 0) DeductQuantitytoMaterial(existingMaterial, disposalForm, deductedAmount);
+        return disposalForm;
     }
 
     public void deleteDisposalForm(Long disposalId) {

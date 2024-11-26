@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 @Service
 public class InventoryLogService {
 
@@ -33,11 +35,28 @@ public class InventoryLogService {
         return inventoryLogRepository.findById(id).orElse(null);
     }
 
+    public static long roundUpDivision(long num, long divisor) {
+        int sign = (num > 0 ? 1 : -1) * (divisor > 0 ? 1 : -1);
+        return sign * (abs(num) + abs(divisor) - 1) / abs(divisor);
+    }
+
+
     public Material AddQuantitytoMaterial(Material existingLogMaterial, Integer addedAmount) {
         if (existingLogMaterial != null) {
             Integer quantityAvailable = existingLogMaterial.getQuantityAvailable();
             quantityAvailable += addedAmount;
             existingLogMaterial.setQuantityAvailable(quantityAvailable);
+
+            // it means it's a reagent
+            if (existingLogMaterial.getQtyPerContainer() != null
+                    && existingLogMaterial.getTotalNoContainers() != null) {
+                Integer addedContainers = (int) roundUpDivision((long) addedAmount, (long) existingLogMaterial.getQtyPerContainer());
+                // get containers to add/reduce based on amt
+                Integer containers = existingLogMaterial.getTotalNoContainers();
+                Integer containersRemaining = containers + addedContainers;
+                existingLogMaterial.setTotalNoContainers(containersRemaining);
+            }
+
             return materialRepository.save(existingLogMaterial);
         } else {
             throw new RuntimeException("Material not found");

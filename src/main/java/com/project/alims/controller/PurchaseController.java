@@ -2,6 +2,7 @@ package com.project.alims.controller;
 
 import com.project.alims.model.Purchase;
 import com.project.alims.service.PurchaseService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,12 @@ public class PurchaseController {
     @GetMapping
     public ResponseEntity<List<Purchase>> getAllPurchases() {
         List<Purchase> purchases = purchaseService.getAllPurchases();
+        return ResponseEntity.ok(purchases);
+    }
+
+    @GetMapping("/order/{purchaseOrderId}")
+    public ResponseEntity<List<Purchase>> getAllPurchasesByPurchaseOrder(@PathVariable Long purchaseOrderId) {
+        List<Purchase> purchases = purchaseService.getAllPurchasesByPurchaseOrderId(purchaseOrderId);
         return ResponseEntity.ok(purchases);
     }
 

@@ -64,6 +64,9 @@ public class BorrowForm {
     @Column(name = "damage_materials")
     private String damageMaterials;
 
+    @Column
+    private String status;
+
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
@@ -84,7 +87,7 @@ public class BorrowForm {
     // Constructors
     public BorrowForm() {}
 
-    public BorrowForm(Long borrowId, Long userId, User user, Long materialId, Material material, LocalDate dateBorrowed, String detailsOfBorrowed, String equipment, Integer qty, String unit, String borrowerDetail, String department, LocalTime timeBorrowed, LocalDate dateReturned, LocalTime timeReturned, String remarks, String damageMaterials) {
+    public BorrowForm(Long borrowId, Long userId, User user, Long materialId, Material material, LocalDate dateBorrowed, String detailsOfBorrowed, String equipment, Integer qty, String unit, String borrowerDetail, String department, LocalTime timeBorrowed, LocalDate dateReturned, LocalTime timeReturned, String remarks, String damageMaterials, String status) {
         this.borrowId = borrowId;
         this.userId = userId;
         this.user = user;
@@ -102,6 +105,7 @@ public class BorrowForm {
         this.timeReturned = timeReturned;
         this.remarks = remarks;
         this.damageMaterials = damageMaterials;
+        this.status = status;
     }
 
     // Getters and Setters
@@ -255,5 +259,13 @@ public class BorrowForm {
 
     public void setMaterialId(Long materialId) {
         this.materialId = materialId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

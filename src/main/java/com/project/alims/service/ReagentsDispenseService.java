@@ -35,7 +35,7 @@ public class ReagentsDispenseService {
         return reagentsDispenseRepository.findById(id).orElse(null);
     }
 
-    public Material DeductQuantitytoMaterial(Material existingReagentMaterial, ReagentDispense reagentDispense, Integer deductedAmount) {
+    public InventoryLog DeductQuantitytoMaterial(Material existingReagentMaterial, ReagentDispense reagentDispense, Integer deductedAmount) {
         if (existingReagentMaterial != null) {
 
             Integer deductedContainers = (int) Math.ceil((double) deductedAmount / existingReagentMaterial.getQtyPerContainer());
@@ -49,10 +49,9 @@ public class ReagentsDispenseService {
                     "Dispensed " + deductedAmount + " " + existingReagentMaterial.getUnit() + " of " +
                             existingReagentMaterial.getItemName() + " and " + deductedContainers + " containers on " + reagentDispense.getDate()
             );
-            inventoryLogService.createInventoryLog(inventoryLog);
 
             // containers handled by Inventory Log
-            return materialRepository.save(existingReagentMaterial);
+            return inventoryLogService.createInventoryLog(inventoryLog);
         } else {
             throw new RuntimeException("Material not found");
         }

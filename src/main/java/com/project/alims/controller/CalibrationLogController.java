@@ -25,7 +25,7 @@ public class CalibrationLogController {
         this.calibrationLogService = calibrationLogService;
     }
 
-    // Create a new CalibrationLog
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CalibrationLog> createCalibrationLog(@RequestPart("body") CalibrationLog calibrationLog,
                                                                @RequestPart("file") MultipartFile file) throws IOException {

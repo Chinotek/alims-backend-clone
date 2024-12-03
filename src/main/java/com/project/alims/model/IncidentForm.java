@@ -14,13 +14,6 @@ public class IncidentForm {
     @Column(name = "incident_form_id")
     private Long incidentFormId;
 
-    @Column(name = "user_id")
-    private Long userId;
-
-    @ManyToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    private User user;
-
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
@@ -35,6 +28,21 @@ public class IncidentForm {
 
     @Column(name = "involved_individuals")
     private String involvedIndividuals;
+
+    @Column(name = "material_id")
+    private String materialId; // comma separated based on amount of materials
+
+    @Column(name = "user_id")
+    private String userId; // comma separated based on amount of users
+
+    @Column(name = "qty")
+    private String qty; // comma separated based on amount of materials
+
+    @Column(name = "brand")
+    private String brand;
+
+    @Column(name = "remarks")
+    private String remarks;
 
     @Column(name = "attachments")
     private String attachments;
@@ -65,27 +73,32 @@ public class IncidentForm {
     // Constructors
     public IncidentForm() {}
 
-    public IncidentForm(Long incidentFormId, Long userId, User user, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String attachments) {
+    public IncidentForm(Long incidentFormId, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String materialId, String userId, String qty, String brand, String remarks) {
         this.incidentFormId = incidentFormId;
-        this.userId = userId;
-        this.user = user;
         this.date = date;
         this.time = time;
         this.natureOfIncident = natureOfIncident;
         this.materialsInvolved = materialsInvolved;
         this.involvedIndividuals = involvedIndividuals;
-        this.attachments = attachments;
+        this.materialId = materialId;
+        this.userId = userId;
+        this.qty = qty;
+        this.brand = brand;
+        this.remarks = remarks;
     }
 
-    public IncidentForm(Long incidentFormId, Long userId, User user, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String attachments, String fileType, byte[] file) {
+    public IncidentForm(Long incidentFormId, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String materialId, String userId, String qty, String brand, String remarks, String attachments, String fileType, byte[] file) {
         this.incidentFormId = incidentFormId;
-        this.userId = userId;
-        this.user = user;
         this.date = date;
         this.time = time;
         this.natureOfIncident = natureOfIncident;
         this.materialsInvolved = materialsInvolved;
         this.involvedIndividuals = involvedIndividuals;
+        this.materialId = materialId;
+        this.userId = userId;
+        this.qty = qty;
+        this.brand = brand;
+        this.remarks = remarks;
         this.attachments = attachments;
         this.fileType = fileType;
         this.file = file;
@@ -98,14 +111,6 @@ public class IncidentForm {
 
     public void setIncidentFormId(Long incidentFormId) {
         this.incidentFormId = incidentFormId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public LocalDate getDate() {
@@ -172,14 +177,6 @@ public class IncidentForm {
         this.dateUpdated = dateUpdated;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     public String getFileType() {
         return fileType;
     }
@@ -194,5 +191,45 @@ public class IncidentForm {
 
     public void setFile(byte[] file) {
         this.file = file;
+    }
+
+    public String getQty() {
+        return qty;
+    }
+
+    public void setQty(String qty) {
+        this.qty = qty;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(String materialId) {
+        this.materialId = materialId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

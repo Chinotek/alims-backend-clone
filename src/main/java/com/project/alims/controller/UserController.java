@@ -19,6 +19,12 @@ public class UserController {
     public UserController(UserService userService){
         this.userService = userService;
     }
+
+    @GetMapping
+    public ResponseEntity<String> baseUrlMessage() {
+        return ResponseEntity.ok("ALIMS Rest API");
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> addUser(@RequestBody User user) throws IOException {
         return userService.addUser(user);

@@ -211,4 +211,12 @@ public class User {
     public void setFilteredSuppliers(String filteredSuppliers) {
         this.filteredSuppliers = filteredSuppliers;
     }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

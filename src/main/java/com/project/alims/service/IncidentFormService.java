@@ -56,14 +56,29 @@ public class IncidentFormService {
         }
     }
 
-    public IncidentForm saveIncidentForm(IncidentForm incidentForm, MultipartFile file) throws IOException {
+    public IncidentForm saveIncidentForm(IncidentForm incidentForm, List<MultipartFile> files) throws IOException {
+        // Handle multiple files
+        if (files != null && !files.isEmpty()) {
+            List<byte[]> fileDataList = new ArrayList<>();
+            List<String> fileNamesList = new ArrayList<>();
+            List<String> fileTypesList = new ArrayList<>();
 
-        if (file.getSize() > 0) {
-            incidentForm.setFile(file.getBytes());
-            incidentForm.setAttachments(file.getOriginalFilename());
-            incidentForm.setFileType(file.getContentType());
+            for (MultipartFile file : files) {
+                if (file.getSize() > 0) {
+                    // Store file data, name, and type
+                    fileDataList.add(file.getBytes());
+                    fileNamesList.add(file.getOriginalFilename());
+                    fileTypesList.add(file.getContentType());
+                }
+            }
+
+            // Update incidentForm with the file data
+            incidentForm.setFiles(fileDataList); // You should have a List<byte[]> field in your entity
+            incidentForm.setAttachments(String.join(",", fileNamesList)); // Save filenames as comma-separated string
+            incidentForm.setFileType(String.join(",", fileTypesList)); // Save file types as comma-separated string
         }
 
+        // Process the quantities and materials as before
         String[] quantities = incidentForm.getQty().split(",");
         String[] materials = incidentForm.getMaterialId().split(",");
         String[] users = incidentForm.getUserId().split(",");
@@ -82,6 +97,7 @@ public class IncidentFormService {
                 .map(Long::parseLong) // Convert each string to Long
                 .toArray(Long[]::new);
 
+        // Save incident form and update material quantities
         IncidentForm createdIncidentForm = incidentFormRepository.save(incidentForm);
         deductQuantitytoMaterial(incidentForm, materialQuantities, materialIds, userIds);
 
@@ -96,14 +112,14 @@ public class IncidentFormService {
         return incidentFormRepository.findById(id);
     }
 
-    public IncidentForm updateIncidentForm(Long id, IncidentForm updatedIncidentForm, MultipartFile file) throws IOException {
+    public IncidentForm updateIncidentForm(Long id, IncidentForm updatedIncidentForm, List<MultipartFile> files) throws IOException {
+        // Fetch the existing incident form
         IncidentForm existingIncidentForm = incidentFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident Form not found with ID: " + id));
 
         String users = existingIncidentForm.getUserId();
 
-        // only things that matter to deduct, therefore updated first
-        // others are below to avoid problems with calculation
+        // Update fields that are provided in the updated form
         if(updatedIncidentForm.getDate() != null) existingIncidentForm.setDate(updatedIncidentForm.getDate());
         if(updatedIncidentForm.getUserId() != null) {
             existingIncidentForm.setUserId(updatedIncidentForm.getUserId());
@@ -115,14 +131,12 @@ public class IncidentFormService {
                 .map(Long::parseLong) // Convert each string to Long
                 .toArray(Long[]::new);
 
+        // Handle material quantities and materials
         if(updatedIncidentForm.getQty() != null || updatedIncidentForm.getMaterialId() != null) {
             String previousQuantities = existingIncidentForm.getQty();
             String previousMaterials = existingIncidentForm.getMaterialId();
-            String newQuantities = existingIncidentForm.getQty();
-            String newMaterials = existingIncidentForm.getMaterialId();
-
-            if(updatedIncidentForm.getMaterialId() != null) newMaterials = updatedIncidentForm.getMaterialId();
-            if(updatedIncidentForm.getQty() != null) newQuantities = updatedIncidentForm.getQty();
+            String newQuantities = updatedIncidentForm.getQty() != null ? updatedIncidentForm.getQty() : previousQuantities;
+            String newMaterials = updatedIncidentForm.getMaterialId() != null ? updatedIncidentForm.getMaterialId() : previousMaterials;
 
             String[] prevQuantityArray = previousQuantities.split(",");
             String[] prevMaterialArray = previousMaterials.split(",");
@@ -150,62 +164,50 @@ public class IncidentFormService {
             Integer[] quantityDeductions = null;
             Long[] materialIds = null;
             if (updatedIncidentForm.getMaterialId() != null) {
-                // only materials list updated
-                // check for not present in new materials list -> quantity should be negative of previous amount (add back)
-                ArrayList<Long> tempMaterials = new ArrayList<Long>(Arrays.asList(newMaterialIds)); // temp
-                ArrayList<Long> prevMaterials = new ArrayList<Long>(Arrays.asList(prevMaterialIds)); // just for contains
-                ArrayList<Integer> tempQuantities = new ArrayList<Integer>(); ; // temp
+                // Process material quantity changes
+                ArrayList<Long> tempMaterials = new ArrayList<>(Arrays.asList(newMaterialIds));
+                ArrayList<Long> prevMaterials = new ArrayList<>(Arrays.asList(prevMaterialIds));
+                ArrayList<Integer> tempQuantities = new ArrayList<>();
 
-                // assume same length - therefore only involves reordering or replacements
-
-                // check for reordering
-                Integer deduction;
-
-                for (int i=0; i<newMaterialIds.length; i++) {
-                    // deduct quantity based on reordering
-                    // find corresponding position in prevMaterials
+                for (int i = 0; i < newMaterialIds.length; i++) {
                     if (prevMaterials.contains(newMaterialIds[i])) {
-                        for (int j=0; j<prevMaterialIds.length; j++) {
-                            if(newMaterialIds[i].compareTo(prevMaterialIds[j]) == 0) {
-                                deduction = newMaterialQuantities[i] - prevMaterialQuantities[j];
+                        for (int j = 0; j < prevMaterialIds.length; j++) {
+                            if (newMaterialIds[i].compareTo(prevMaterialIds[j]) == 0) {
+                                int deduction = newMaterialQuantities[i] - prevMaterialQuantities[j];
                                 tempQuantities.add(deduction);
-
                             }
                         }
                     } else {
-                        // else just add in newQuantity
                         tempQuantities.add(newMaterialQuantities[i]);
                     }
                 }
 
-                // determine missing ones
-                for (int i=0; i<prevMaterialIds.length; i++) {
-                    if (!tempMaterials.contains(prevMaterialIds[i])) { // Check if id is not in temp
-                        tempMaterials.add(prevMaterialIds[i]); // Add the id to temp
-                        tempQuantities.add(-prevMaterialQuantities[i]); // add back so, negative deduction
+                for (int i = 0; i < prevMaterialIds.length; i++) {
+                    if (!tempMaterials.contains(prevMaterialIds[i])) {
+                        tempMaterials.add(prevMaterialIds[i]);
+                        tempQuantities.add(-prevMaterialQuantities[i]);
                     }
                 }
 
                 materialIds = tempMaterials.toArray(new Long[0]);
                 quantityDeductions = tempQuantities.toArray(new Integer[0]);
-
             } else if (updatedIncidentForm.getQty() != null) {
-                // only quantities updated
-                // get difference then pass back
                 quantityDeductions = new Integer[newMaterialQuantities.length];
                 materialIds = prevMaterialIds;
-                for(int i=0; i<newMaterialQuantities.length; i++) {
+                for (int i = 0; i < newMaterialQuantities.length; i++) {
                     quantityDeductions[i] = newMaterialQuantities[i] - prevMaterialQuantities[i];
                 }
             }
-            if(quantityDeductions == null) throw new RuntimeException("quantityDeductions not determined");
-            if(materialIds == null) throw new RuntimeException("materialIds not determined");
 
+            if (quantityDeductions == null || materialIds == null) {
+                throw new RuntimeException("quantityDeductions or materialIds not determined");
+            }
+
+            // Deduct quantities from materials
             deductQuantitytoMaterial(existingIncidentForm, quantityDeductions, materialIds, userIds);
         }
 
-
-
+        // Update other fields that are provided
         if(updatedIncidentForm.getTime() != null) existingIncidentForm.setTime(updatedIncidentForm.getTime());
         if(updatedIncidentForm.getMaterialsInvolved() != null) existingIncidentForm.setMaterialsInvolved(updatedIncidentForm.getMaterialsInvolved());
         if(updatedIncidentForm.getInvolvedIndividuals() != null) existingIncidentForm.setInvolvedIndividuals(updatedIncidentForm.getInvolvedIndividuals());
@@ -213,16 +215,30 @@ public class IncidentFormService {
         if(updatedIncidentForm.getBrand() != null) existingIncidentForm.setBrand(updatedIncidentForm.getBrand());
         if(updatedIncidentForm.getRemarks() != null) existingIncidentForm.setRemarks(updatedIncidentForm.getRemarks());
 
-
         if(updatedIncidentForm.getMaterialId() != null) existingIncidentForm.setMaterialId(updatedIncidentForm.getMaterialId());
         if(updatedIncidentForm.getQty() != null) existingIncidentForm.setQty(updatedIncidentForm.getQty());
 
-        if (file.getSize() > 0) {
-            existingIncidentForm.setFile(file.getBytes());
-            existingIncidentForm.setAttachments(file.getOriginalFilename());
-            existingIncidentForm.setFileType(file.getContentType());
+        // Handle file uploads (multiple files)
+        if (files != null && !files.isEmpty()) {
+            List<byte[]> fileDataList = new ArrayList<>();
+            List<String> fileNamesList = new ArrayList<>();
+            List<String> fileTypesList = new ArrayList<>();
+
+            for (MultipartFile file : files) {
+                if (file.getSize() > 0) {
+                    fileDataList.add(file.getBytes());
+                    fileNamesList.add(file.getOriginalFilename());
+                    fileTypesList.add(file.getContentType());
+                }
+            }
+
+            // Set the file data on the incident form
+            existingIncidentForm.setFiles(fileDataList); // Store multiple files as byte arrays
+            existingIncidentForm.setAttachments(String.join(",", fileNamesList)); // Store filenames as a comma-separated string
+            existingIncidentForm.setFileType(String.join(",", fileTypesList)); // Store file types as a comma-separated string
         }
 
+        // Save the updated incident form
         return incidentFormRepository.save(existingIncidentForm);
     }
 

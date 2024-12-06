@@ -8,6 +8,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,32 +40,58 @@ public class IncidentFormController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Download
-    @GetMapping("/file/{id}")
-    public ResponseEntity<Resource> downloadIncidentFormFile(@PathVariable Long id) {
-        IncidentForm incidentForm = incidentFormService.getIncidentFormById(id).orElse(null);
-        if (incidentForm == null) throw new RuntimeException("Incident Form not found");
-        byte[] bytes = incidentForm.getFile();
-        if (bytes == null) throw new RuntimeException("File not found");
-        ByteArrayResource file = new ByteArrayResource(bytes);
+    @GetMapping("/file/{id}/{fileIndex}")
+    public ResponseEntity<Resource> downloadIncidentFormFile(@PathVariable Long id, @PathVariable int fileIndex) {
+        // Fetch the incident form from the repository
+        IncidentForm incidentForm = incidentFormService.getIncidentFormById(id)
+                .orElseThrow(() -> new RuntimeException("Incident Form not found"));
+
+        // Get the list of files (bytes) stored in the incident form
+        List<byte[]> files = incidentForm.getFiles();
+        if (files == null || files.isEmpty()) {
+            throw new RuntimeException("No files associated with this incident form.");
+        }
+
+        // Ensure the requested file index is valid
+        if (fileIndex < 0 || fileIndex >= files.size()) {
+            throw new RuntimeException("Invalid file index.");
+        }
+
+        // Get the file bytes based on the index
+        byte[] fileBytes = files.get(fileIndex);
+
+        // Get the corresponding file name
+        String[] filenames = incidentForm.getAttachments().split(","); // assuming file names are stored in a comma-separated list
+        if (filenames.length <= fileIndex) {
+            throw new RuntimeException("File name for the selected index not found.");
+        }
+
+        String fileName = filenames[fileIndex];
+
+        // Create a resource from the file bytes
+        ByteArrayResource resource = new ByteArrayResource(fileBytes);
+
+        // Return the file as a response entity with proper headers for download
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
-                        .filename(incidentForm.getAttachments()).build().toString())
-                .body(file);
+                        .filename(fileName).build().toString())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
     @PostMapping
-    public ResponseEntity<IncidentForm> createIncidentForm(@RequestPart("body") IncidentForm incidentForm,
-                                                           @RequestPart("file") MultipartFile file) throws IOException {
-        IncidentForm savedIncidentForm = incidentFormService.saveIncidentForm(incidentForm, file);
+    public ResponseEntity<IncidentForm> createIncidentForm(
+            @RequestPart("body") IncidentForm incidentForm,
+            @RequestPart("files") List<MultipartFile> files) throws IOException {
+        IncidentForm savedIncidentForm = incidentFormService.saveIncidentForm(incidentForm, files);
         return ResponseEntity.ok(savedIncidentForm);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<IncidentForm> updateIncidentForm(@PathVariable Long id,
                                                            @RequestPart("body") IncidentForm incidentForm,
-                                                           @RequestPart("file") MultipartFile file) throws IOException {
-        IncidentForm updatedIncidentForm = incidentFormService.updateIncidentForm(id, incidentForm, file);
+                                                           @RequestPart("files") List<MultipartFile> files) throws IOException {
+        IncidentForm updatedIncidentForm = incidentFormService.updateIncidentForm(id, incidentForm, files);
         return ResponseEntity.ok(updatedIncidentForm);
     }
 

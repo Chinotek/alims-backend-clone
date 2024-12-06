@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "incident_forms")
@@ -51,7 +52,8 @@ public class IncidentForm {
     private String fileType;  // store filesystem path
 
     @Column()
-    private byte[] file;
+    @ElementCollection
+    private List<byte[]> files;
 
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
@@ -87,7 +89,7 @@ public class IncidentForm {
         this.remarks = remarks;
     }
 
-    public IncidentForm(Long incidentFormId, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String materialId, String userId, String qty, String brand, String remarks, String attachments, String fileType, byte[] file) {
+    public IncidentForm(Long incidentFormId, LocalDate date, LocalTime time, String natureOfIncident, String materialsInvolved, String involvedIndividuals, String materialId, String userId, String qty, String brand, String remarks, String attachments, String fileType, List<byte[]> files) {
         this.incidentFormId = incidentFormId;
         this.date = date;
         this.time = time;
@@ -101,7 +103,7 @@ public class IncidentForm {
         this.remarks = remarks;
         this.attachments = attachments;
         this.fileType = fileType;
-        this.file = file;
+        this.files = files;
     }
 
     // Getters and Setters
@@ -185,12 +187,12 @@ public class IncidentForm {
         this.fileType = fileType;
     }
 
-    public byte[] getFile() {
-        return file;
+    public List<byte[]> getFiles() {
+        return files;
     }
 
-    public void setFile(byte[] file) {
-        this.file = file;
+    public void setFiles(List<byte[]> files) {
+        this.files = files;
     }
 
     public String getQty() {

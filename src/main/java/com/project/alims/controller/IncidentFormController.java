@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://alims-pgh.vercel.app")
 @RequestMapping("/incident-forms")
 public class IncidentFormController {
     private final IncidentFormService incidentFormService;

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://alims-pgh.vercel.app")
 @RequestMapping("/inventory-log")
 public class InventoryLogController {
 

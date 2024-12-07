@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://alims-pgh.vercel.app")
 @RequestMapping("/supplier")
 public class SupplierController {
     private final SupplierService supplierService;

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "https://alims-pgh.vercel.app")
 @RequestMapping("/material")
 public class MaterialController {
 

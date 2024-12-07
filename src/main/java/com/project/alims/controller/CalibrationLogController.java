@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://alims-pgh.vercel.app")
 @RequestMapping("/calibration")
 public class CalibrationLogController {
 

@@ -11,6 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("https://alims-pgh.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true); // If you need to include cookies in the request
     }

@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://alims-backend-production.up.railway.app")
+                .allowedOrigins("http://alims-backend-production.up.railway.app")
                 .allowedOrigins("https://alims-pgh.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true); // If you need to include cookies in the request

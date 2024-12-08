@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"https://alims-pgh.vercel.app", "http://alims-backend-production.up.railway.app"})
+@CrossOrigin(origins = "https://alims-pgh.vercel.app")
 @RequestMapping("/lab")
 public class LaboratoryController {
     private final LaboratoryService laboratoryService;

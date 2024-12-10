@@ -1,6 +1,9 @@
 package com.project.alims.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +45,7 @@ public class PurchaseOrder {
     private Long labId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", insertable = false, updatable = false)
     private Laboratory laboratory;
 
@@ -49,6 +53,7 @@ public class PurchaseOrder {
     private Long userId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
 
@@ -56,6 +61,7 @@ public class PurchaseOrder {
     private Long supplierId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "supplier_id", referencedColumnName = "supplier_id", insertable = false, updatable = false)
     private Supplier supplier;
 

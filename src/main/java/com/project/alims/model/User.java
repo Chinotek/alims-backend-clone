@@ -1,6 +1,9 @@
 package com.project.alims.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -55,6 +58,7 @@ public class User {
     private Long labId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "lab_id", referencedColumnName = "lab_id", insertable = false, updatable = false)
     private Laboratory laboratory;
 

@@ -1,6 +1,9 @@
 package com.project.alims.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -17,6 +20,7 @@ public class Purchase {
     private Long purchaseOrderId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "purchase_order_id", referencedColumnName = "purchase_order_id", insertable = false, updatable = false)
     private PurchaseOrder purchaseOrder;  // Foreign key to Materials
 
@@ -24,6 +28,7 @@ public class Purchase {
     private Long materialId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material material;  // Foreign key to Materials
 

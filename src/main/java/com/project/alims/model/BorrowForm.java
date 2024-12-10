@@ -1,6 +1,9 @@
 package com.project.alims.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,6 +21,7 @@ public class BorrowForm {
     private Long userId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private User user;
 
@@ -25,6 +29,7 @@ public class BorrowForm {
     private Long materialId;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material material;
 
